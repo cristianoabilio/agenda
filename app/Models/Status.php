@@ -9,4 +9,6 @@ class Status extends Model
     protected $table = 'status';
     protected $primaryKey = 'id';
     protected $fillable = ['name'];
+
+    const ACTIVE = 1;
 }

@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
+use App\Models\Status;
+
 class RegisterController extends Controller
 {
     /*
@@ -64,6 +66,7 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
+            'status_id' => Status::ACTIVE,
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
