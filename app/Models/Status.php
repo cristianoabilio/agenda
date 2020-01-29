@@ -11,4 +11,6 @@ class Status extends Model
     protected $fillable = ['name'];
 
     const ACTIVE = 1;
+    const INACTIVE = 2;
+    const DELETED = 3;
 }

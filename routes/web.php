@@ -17,8 +17,19 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/company', 'CompanyController@index')->name('company');
-Route::get('/users', 'UserController@index')->name('users');
+Route::group(['middleware' => 'auth'], function() {
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/company', 'CompanyController@index')->name('company');
+    Route::post('/company', 'CompanyController@store')->name('company');
+    Route::post('/company/list', 'CompanyController@filter');
+    Route::post('/company/destroy', 'CompanyController@destroy');
+
+    Route::get('/users', 'UserController@index')->name('users');
+    Route::post('/users', 'UserController@store')->name('users');
+    Route::post('/users/list', 'UserController@filter');
+    Route::post('/users/destroy', 'UserController@destroy');
+});
+
+
 
 
