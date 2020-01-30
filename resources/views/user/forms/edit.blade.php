@@ -49,6 +49,16 @@
         </div>
         <div class="row">
             <div class="form-group col-12">
+                <label>Perfil</label>
+                <select name="profile_id" id="profile_id" class="form-control" v-model="item.profile_id">
+                    @foreach ($profiles as $profile)
+                        <option value="{{$profile->id}}">{{ $profile->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-12">
                 <label>Gênero</label>
                 <b-form-radio-group id="edit-userGender" buttons name="gender" v-model="item.gender">
                     <b-form-radio button-variant="outline-primary" value="F">Feminino</b-form-radio>

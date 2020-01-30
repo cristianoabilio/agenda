@@ -27,6 +27,7 @@ class StoreUser extends FormRequest
         return [
             'id'       => 'nullable|numeric',
             'company_id'    => 'nullable',
+            'profile_id'    => 'nullable',
             'status_id'        => 'required',
             'cellphone'        => 'required|celular_com_ddd',
             'phone'         => 'nullable|telefone_com_ddd',

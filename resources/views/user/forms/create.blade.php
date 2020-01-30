@@ -48,6 +48,17 @@
                 <input type="text" name="birthday" id="birthday" v-mask="'##/##/####'"  class="form-control" v-validate="'required'">
             </div>
         </div>
+
+        <div class="row">
+            <div class="form-group col-12">
+                <label>Perfil</label>
+                <select name="profile_id" id="profile_id" class="form-control">
+                    @foreach ($profiles as $profile)
+                        <option value="{{$profile->id}}">{{ $profile->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
         <div class="row">
             <div class="form-group col-12">
                 <label>Gênero</label>

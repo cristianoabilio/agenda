@@ -18,6 +18,11 @@ use  App\Http\Requests\Company\StoreCompany;
 
 class CompanyController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeresource(Company::class);
+    }
+
     /**
      * Display a listing of the resource.
      *

@@ -8,9 +8,10 @@ class Profile extends Model
 {
     protected $table = 'profile';
     protected $primaryKey = 'id';
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'private'];
 
     const ADMIN = 1;
     const RESPONSABLE = 2;
+    
     
 }

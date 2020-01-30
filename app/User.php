@@ -2,9 +2,13 @@
 
 namespace App;
 
+
+use App\Models\Profile;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -37,6 +41,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'birthday'  => 'date:dmY',
     ];
+
+
+    public function isSuperAdmin() {
+        $user = Auth::user();
+        if ($user->profile_id == Profile::ADMIN) {
+            return true;
+        }
+        return false;
+
+    }
 
     public function company() {
         return $this->hasOne('App\Models\Company');

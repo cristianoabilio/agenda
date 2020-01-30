@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Models\Status;
+use App\Models\Profile;
 
 use  App\Http\Requests\Users\StoreUser;
 use Illuminate\Support\Facades\DB;
@@ -21,7 +22,17 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('user.index', []);
+        $user = Auth::user();
+        $profiles = [];
+
+        if ($user->company_id) {
+            $profiles = Profile::where('private', 0)->get();
+        } else {
+            $profiles = Profile::get();
+        }
+        
+        
+        return view('user.index', ['profiles' => $profiles]);
     }
 
     /**
@@ -31,8 +42,16 @@ class UserController extends Controller
      */
     public function filter()
     {
-        $users = User::whereNull('company_id')
-            ->where('status_id', '<>', Status::DELETED)->get();
+        $user = Auth::user();
+
+        if ($user->company_id) {
+            $users = User::where('company_id', $user->company_id)
+                ->where('status_id', '<>', Status::DELETED)->get();
+        } else {
+            $users = User::whereNull('company_id')
+                ->where('status_id', '<>', Status::DELETED)->get();
+        }
+
         return json_encode([
             'status' => 'success', 
              'data' => $users
@@ -67,6 +86,7 @@ class UserController extends Controller
                 'birthday'  => $date->dateToSql($request->input('birthday'))
             ]);
 
+
             $id = $request->input('id');
             if ($id) {
                 $user = User::where('id', $id)->first();
@@ -76,6 +96,14 @@ class UserController extends Controller
                 }
                 $message = 'Usuário atualizado com sucesso';
             } else {
+                $company_id = Auth::user()->company_id;
+
+                if ($company_id) {
+                    $request->merge([
+                        'company_id' => $company_id
+                    ]);
+                }
+
                 $request->merge([
                     'password' => str_random(40)
                 ]);
