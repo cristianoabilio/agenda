@@ -41,6 +41,9 @@
                             </li>
                             @endcan
                             <li class="nav-item">
+                                <a class="nav-link" href="{{ route('modality') }}">Modalidades</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="{{ route('users') }}">Usuários</a>
                             </li>
                         @endif

@@ -59,6 +59,7 @@ import 'vue2-datepicker/index.css'
 
 
 Vue.component('table-pagination-component', require('./components/TablePaginationComponent.vue').default);
+Vue.component('checkbox-component', require('./components/CheckBoxComponent.vue').default);
 
 
 /**
