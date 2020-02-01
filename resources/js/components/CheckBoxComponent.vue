@@ -19,11 +19,11 @@
 <script>
   export default {
       props: {
-          options: Array
+          options: Array,
+          selected: [], // Must be an array reference!
       },
     data() {
       return {
-        selected: [], // Must be an array reference!
       }
     },
     methods: {

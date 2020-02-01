@@ -16,6 +16,7 @@
             >  
                 <checkbox-component
                     :options="{{$modalities}}"
+                    :selected="{{$selected}}"
                     ref="modalities"
                 >
                 

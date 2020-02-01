@@ -48,6 +48,13 @@ class User extends Authenticatable
         if ($user->profile_id == Profile::ADMIN) {
             return true;
         }
+    }
+
+    public function isManagerCompany() {
+        $user = Auth::user();
+        if ($user->profile_id == Profile::RESPONSABLE) {
+            return true;
+        }
         return false;
 
     }

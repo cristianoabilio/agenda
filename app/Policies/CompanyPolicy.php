@@ -12,10 +12,10 @@ class CompanyPolicy
 
 
     public function before(User $user)
-    {
+    { 
         if ($user->isSuperAdmin()) {
             return true;
-        }
+        }        
     }
     
     /**

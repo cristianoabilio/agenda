@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Company;
 use Illuminate\Http\Request;
 
-use App\User;
+use App\Models\Company;
 use App\Models\Plan;
 use App\Models\Profile;
 use App\Models\Status;
+use App\User;
 
 use Illuminate\Support\Facades\DB;
 

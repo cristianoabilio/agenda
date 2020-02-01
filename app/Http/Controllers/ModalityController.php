@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\CompanyModality;
 use App\Models\Modality;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+
 class ModalityController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -17,10 +20,15 @@ class ModalityController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', CompanyModality::class);
+
         $modalities = Modality::orderBy('name')->get();
 
+        $company_id = Auth::user()->company_id;
+        $companyModalities = CompanyModality::where('company_id', $company_id)->pluck('modality_id');
 
-        return view('modality.index', ['modalities' => $modalities]);        
+
+        return view('modality.index', ['modalities' => $modalities, 'selected' => $companyModalities]);        
     }
 
     /**

@@ -36,13 +36,15 @@
                     <ul class="navbar-nav mr-auto">
                         @if (Auth::user()) 
                             @can('viewAny', \App\Models\Company::class)
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('company') }}">Empresas</a>
-                            </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('company') }}">Empresas</a>
+                                </li>
                             @endcan
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('modality') }}">Modalidades</a>
-                            </li>
+                            @can('viewAny',  \App\Models\CompanyModality::class)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('modality') }}">Modalidades</a>
+                                </li>
+                            @endcan
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('users') }}">Usuários</a>
                             </li>
