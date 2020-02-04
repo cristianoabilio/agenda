@@ -12,6 +12,8 @@ class Profile extends Model
 
     const ADMIN = 1;
     const RESPONSABLE = 2;
+    const TEACHER = 3;
+    const STUDENT = 4;
     
     
 }

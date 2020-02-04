@@ -1,11 +1,11 @@
 <template>
   <div class="">
-    <b-form-group label="Selecione as aulas disponíveis">
+    <b-form-group label="Selecione">
       <b-form-checkbox-group
         v-model="selected"
         :options="options"
         style="column-count: 3;"
-        size="lg"
+        size="sm"
         name="item[]"
         value-field="id"
         text-field="name"

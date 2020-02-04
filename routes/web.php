@@ -27,11 +27,16 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('/company/destroy', 'CompanyController@destroy');
 
 
+        
     });
     
+
     Route::get('/modality', 'ModalityController@index')->name('modality');
     Route::post('/modality', 'ModalityController@store')->name('modality');
 
+    Route::get('/classes', 'ClassesController@index')->name('classes');
+    Route::post('/classes', 'ClassesController@store')->name('classes');
+    Route::post('/classes/list', 'ClassesController@filter');
 
 
     Route::get('/users', 'UserController@index')->name('users');

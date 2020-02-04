@@ -8,7 +8,6 @@
     </div>  
     <b-table
       id="my-table"
-      ref="users"
       responsive
       striped hover
       :items="items"
@@ -34,15 +33,32 @@
 
                 </b-dropdown>
 
-            </span>        
-            <span v-else>
-            <template v-if="data.field.jsonPath">
-                @{{ data.item[ column.key ][ column.jsonPath ] }}
-            </template>
+            </span>     
+            <span v-else-if="data.field.type == 'object'">
+              <template v-if="column.key == 'teacher'">                  
+                {{ data.item.teacher.name }}
+              </template>  
+              <template v-if="column.key == 'modality'">                  
+                {{ data.item.modality.modality.name }}
+              </template>  
+              <template v-if="column.key == 'level'">                  
+                {{ data.item.level.name }}
+              </template>              
+            </span> 
 
-            <template v-else>
-                {{ data.item[ column.key ] }}
-            </template>
+            <span v-else-if="column.key == 'weekday'">
+              {{ weekday(data.item[column.key]) }}
+            </span>  
+
+
+            <span v-else>
+              <template v-if="data.field.jsonPath">
+                  @{{ data.item[ column.key ][ column.jsonPath ] }}
+              </template>
+
+              <template v-else>
+                    {{ data.item[ column.key ] }}                 
+              </template>
             </span>
         </template>         
     </b-table>
@@ -61,6 +77,7 @@
 <script>
   export default {
     props: {
+        refs: String,
         perPage: Number,
         fields: Array,
         url: String,
@@ -82,12 +99,40 @@
       rows() {
         this.total = this.items.length;
         return this.total
-      }
+      },
+ 
     },
     created: function() {
       this.getItems();           
     },
     methods: {
+      weekday (day) {
+        switch (day) {
+          case '0': 
+            console.log('domingo')
+            return 'Domingo';
+          break;  
+          case '1': 
+            return 'Segunda-feira';
+          break; 
+          case '2': 
+            return 'Terça-feira';
+          break;
+          case '3': 
+            return 'Quarta-feira';
+          break;   
+          case '4': 
+            return 'Quinta-feira';
+          break;    
+          case '5': 
+            return 'Sexta-feira';
+          break;    
+          case '6': 
+            return 'Sábado';
+          break;                                       
+        }
+      },
+
       create (id, url) {
         let vThis = this;
         let data = $("#"+id).serialize();
