@@ -11,7 +11,7 @@
             <table-pagination-component        
                 ref="classes"
                 :name="'classes'"         
-                :per-page="5" 
+                :per-page="20" 
                 :url="'/classes/list/'"
                 :fields="[
                     'index',

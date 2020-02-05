@@ -1,9 +1,9 @@
 <div>
     <form
-    id="form-delete-user"
-    ref="form-delete-user"
+    id="form-delete-classes"
+    ref="form-delete-classes"
     method="POST"
-    data-vv-scope="form-delete-user"
+    data-vv-scope="form-delete-classes"
     autocomplete="off"
     >                            
         <div class="container py-3">
@@ -22,7 +22,7 @@
                     v-b-modal.modal-footer-sm
                     class="float-right mx-1"
                     :variant="'danger'"
-                    @click="$refs.users.deleteUser()"
+                    @click="$refs.classes.del('form-delete-classes', '/classes/destroy')"
                 >
                         <i class="fas fa-trash"></i>
                         Excluir

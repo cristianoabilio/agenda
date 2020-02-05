@@ -73,6 +73,7 @@ class ClassesController extends Controller
         $companies = Classes::with(['teacher' => function($query) {
             $query->where('company_id', Auth::user()->company_id);
         }])
+            ->where('status_id', Status::ACTIVE)
             ->with('modality.modality')
             ->with('level')
             ->get();
@@ -103,17 +104,26 @@ class ClassesController extends Controller
     {
         $response = DB::transaction(function () use ($request) {           
             $id = $request->input('id');
+            $classes = [];
             if ($id) {
                 $class = Classes::where('id', $id)->first();
+                
                 if ($class) {
+
+                    $item = $request->input('item');
+
+                    $request->merge([
+                        'weekday'  => $item,
+                    ]);
+
                     Classes::where('id', $id)
-                        ->update($request->all());
+                    ->update($request->except(['item']));
+
                 }
                 $message = 'Aula atualizada com sucesso';
             } else {
                 $items = $request->input('item');
-
-                $classes = [];
+                
                 foreach ($items as $k => $item) {
                     $request->merge([
                         'weekday'  => $item,
@@ -173,8 +183,23 @@ class ClassesController extends Controller
      * @param  \App\Models\Classes  $classes
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Classes $classes)
+    public function delete(Request $request)
     {
-        //
+        $id = $request->input('id');        
+
+        if ($id) {
+            $class = Classes::where('id', $id)->first();
+
+            if ($class) {
+
+                $class->status_id = Status::DELETED;
+                $class->save();
+
+                return json_encode([
+                    'status' => 'success', 
+                    'message' => 'Aula excluída com sucesso.', 'data' => $class
+                ]);
+            }
+        }
     }
 }

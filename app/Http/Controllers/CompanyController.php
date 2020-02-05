@@ -186,7 +186,7 @@ class CompanyController extends Controller
 
                 return json_encode([
                     'status' => 'success', 
-                    'message' => 'Empsa excluída com sucesso.', 'data' => $company
+                    'message' => 'Empresa excluída com sucesso.', 'data' => $company
                 ]);
                                
             }

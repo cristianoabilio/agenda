@@ -109,7 +109,6 @@
       weekday (day) {
         switch (day) {
           case '0': 
-            console.log('domingo')
             return 'Domingo';
           break;  
           case '1': 

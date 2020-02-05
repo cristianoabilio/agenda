@@ -37,6 +37,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/classes', 'ClassesController@index')->name('classes');
     Route::post('/classes', 'ClassesController@store')->name('classes');
     Route::post('/classes/list', 'ClassesController@filter');
+    Route::post('/classes/destroy', 'ClassesController@delete');
 
 
     Route::get('/users', 'UserController@index')->name('users');
