@@ -23,7 +23,7 @@ class Date
     }
 
     public static function diffDate($start, $end, $format = '%Y') {
-        return date_diff(date_create(date($end)), date_create($start))->format($format);
+        return date_diff(date_create($end), date_create($start))->format($format);
     }
 
     /**

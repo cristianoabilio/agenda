@@ -40,14 +40,19 @@
                                     <a class="nav-link" href="{{ route('company') }}">Empresas</a>
                                 </li>
                             @endcan
-                            @can('viewAny',  \App\Models\CompanyModality::class)
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('modality') }}">Modalidades</a>
-                                </li>
-                            @endcan
                             @can('viewAny',  \App\Models\Classes::class)
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('classes') }}">Aulas</a>
+                                </li>
+                            @endcan
+                            @can('viewAny',  \App\Models\UserPlan::class)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('user-plan') }}">Créditos</a>
+                                </li>
+                            @endcan
+                            @can('viewAny',  \App\Models\CompanyModality::class)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('modality') }}">Modalidades</a>
                                 </li>
                             @endcan
                             <li class="nav-item">

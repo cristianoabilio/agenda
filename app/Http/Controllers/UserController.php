@@ -40,21 +40,30 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function filter()
+    public function filter(Request $request)
     {
         $user = Auth::user();
 
         if ($user->company_id) {
-            $users = User::where('company_id', $user->company_id)
-                ->where('status_id', '<>', Status::DELETED)->get();
+            $query = User::where('company_id', $user->company_id);
+                
         } else {
-            $users = User::whereNull('company_id')
-                ->where('status_id', '<>', Status::DELETED)->get();
+            $query = User::whereNull('company_id');                
         }
+
+        if (($request->input('name')) && !empty($request->input('name'))) {
+            $query = $query->where('name', 'LIKE', '%'.preg_replace('/([%_])/', '\\$1', $request->input('name')).'%');
+        }
+
+        if (($request->input('profile_id')) && !empty($request->input('profile_id'))) {
+            $query = $query->where('profile_id', $request->input('profile_id'));
+        }
+        $users = $query->where('status_id', '<>', Status::DELETED)->get();
 
         return json_encode([
             'status' => 'success', 
-             'data' => $users
+             'data' => $users,
+             'message' => 'Busca realizada'
         ]);
     }
 

@@ -50,6 +50,12 @@
               {{ weekday(data.item[column.key]) }}
             </span>  
 
+            <span v-else-if="data.field.type == 'buttons'">
+              <b-btn variant="success" v-b-modal.create v-bind:item="data.item" @click="sendInfo(data.item)">
+                Adicionar
+              </b-btn>
+            </span>
+
 
             <span v-else>
               <template v-if="data.field.jsonPath">
@@ -158,7 +164,16 @@
                     vThis.items.push(response.data.data);                       
 
 
-                    vThis.$root.mensagem('success', response.data.message)
+                    vThis.$root.mensagem('success', response.data.message);
+
+                    //if (id == 'form-create-credit') {
+                      $('#studants').css('display', 'none');
+                      $('#new-plan').css('display', 'block');
+
+                      vThis.item = response.data.data;
+                      vThis.$root.item = response.data.data;
+                    //}
+                    
 
                   } else {
                       
@@ -364,7 +379,53 @@
           vThis.index = index;
           vThis.$root.item = item
           vThis.$root.item.resṕonsable = vThis.item.responsable
+      },
+
+      search (id, url) {
+        let vThis = this;
+        let data = $("#"+id).serialize();
+
+        console.log(data);
+        this.$validator.validateAll(id).then(valid => {
+            if (!valid) {
+              vThis.$root.mensagem('error', 'Preencha todos os campos obrigatórios')
+
+
+                $.each(response.data.errors, function(index, value) {
+                    $('#'+index).addClass('is-invalid');
+                });
+                return false;
+            } else {
+              let id = $('#id').val();
+
+              axios.post(url, data)
+              .then(function (response) {
+                  if (response.data.status == 'success') {
+                    $('#studants').css('display', 'block');
+                    console.log(response.data.data);
+                    vThis.items = response.data.data;                       
+                    vThis.$root.items =response.data.data;  
+
+
+                    vThis.$root.mensagem('success', response.data.message)
+
+                  } else {
+                      
+                      $.each(response.data.errors, function(index, value) {
+                          $('#'+index).addClass('is-invalid');
+                      });
+                  }                 
+              }).catch(errors => {
+
+                $.each(errors.response.data.errors, function (index, value) {
+                    console.log(index);
+                    $('#' + index).addClass('is-invalid');
+                });
+            });
+            }         
+        });
       }
+
     },
     
   }

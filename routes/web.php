@@ -40,6 +40,12 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('/classes/destroy', 'ClassesController@delete');
 
 
+    Route::get('/user-plan', 'UserPlanController@index')->name('user-plan');
+    Route::post('/user-plan', 'UserPlanController@store')->name('user-plan');
+    Route::post('/user-plan/list', 'UserPlanController@filter');
+    Route::post('/user-plan/destroy', 'UserPlanController@delete');
+
+
     Route::get('/users', 'UserController@index')->name('users');
     Route::post('/users', 'UserController@store')->name('users');
     Route::post('/users/list', 'UserController@filter');

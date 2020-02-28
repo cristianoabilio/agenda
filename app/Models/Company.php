@@ -18,4 +18,8 @@ class Company extends Model
     public function responsable() {
         return $this->hasOne('App\User', 'company_id', 'id')->where('users.profile_id', '2');
     }
+
+    public function plans() {
+        return $this->hasMany('App\Models\Plan', 'company_id', 'id');
+    }
 }
