@@ -39,8 +39,18 @@ class Date
             return date('Y-m-d', strtotime(str_ireplace('/', '-', $date)));
         } else {
             return date('Y-m-d H:i:s', strtotime($date.' '.$time));
-        }
-        
+        }        
+    }
+
+        /**
+     * @param date $date 
+     * @param string $time
+     */
+    public function dateFromSql($date, $time = null) {
+      $format = explode('-', $date);
+      $date = $format[2].'/'.$format[1].'/'.$format[0];
+      
+      return $date;       
     }
 
     /**

@@ -36,6 +36,9 @@
                         { 'key' : 'id', 'sortable' : true, 'label' : '#' },
                         { 'key' : 'name', 'sortable' : true, 'label' : 'Nome' },
                         { 'key' : 'email', 'sortable' : true, 'label' : 'E-mail' },
+                        { 'key' : 'available', 'sortable' : false, 'label' : 'Disponível' },
+                        { 'key' : 'end', 'sortable' : false, 'label' : 'Validade' },
+                        { 'key' : 'status_name', 'sortable' : false, 'label' : 'Status' },
                         { 'key' : 'buttons', 'sortable' : false, 'label' : '', 'type' : 'buttons' }
                     ]"
                 >         
@@ -52,6 +55,11 @@
 
             >                
                 @include("user.plan.create")
+            </b-modal>
+            <b-modal id="delete" title="Créditos"
+
+            >                
+                @include("user.plan.delete")
             </b-modal>
         </div>
         

@@ -56,9 +56,24 @@ class UserController extends Controller
         }
 
         if (($request->input('profile_id')) && !empty($request->input('profile_id'))) {
-            $query = $query->where('profile_id', $request->input('profile_id'));
+            $query = $query->where('profile_id', $request->input('profile_id'));            
         }
         $users = $query->where('status_id', '<>', Status::DELETED)->get();
+
+        if ($users) {
+            foreach ($users as $user) {
+                $plan = $user->plan()->latest()->first();
+
+                if ($plan) {
+                    $date = new Date();
+                    $user->available = $plan->available;
+                    $user->end = $date->dateFromSql($plan->end);
+                    $user->plan_id = $plan->id;
+                    $user->plan_status = $plan->status_id;
+                    $user->status_name = ($plan->status_id == Status::ACTIVE) ? 'Ativo' : 'Expirado';
+                }
+            }
+        }
 
         return json_encode([
             'status' => 'success', 

@@ -54,6 +54,12 @@
               <b-btn variant="success" v-b-modal.create v-bind:item="data.item" @click="sendInfo(data.item)">
                 Adicionar
               </b-btn>
+              <template v-if="data.item['plan_status'] == 1">
+                <b-btn variant="danger" v-b-modal.delete v-bind:item="data.item" @click="sendInfo(data.item)">
+                  Desativar
+                </b-btn>
+              </template>
+              
             </span>
 
 

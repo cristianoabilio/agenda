@@ -158,4 +158,30 @@ class UserPlanController extends Controller
     {
         //
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function delete(Request $request)
+    {
+        $id = $request->input('id');    
+
+        if ($id) {
+            $userPlan = UserPlan::where('id', $id)->first();
+
+            if ($userPlan) {
+
+                $userPlan->status_id = Status::DELETED;
+                $userPlan->save();
+
+                return json_encode([
+                    'status' => 'success', 
+                    'message' => 'Plano desativado com sucesso.', 'data' => $userPlan
+                ]);
+                               
+            }
+        }
+    }    
 }
