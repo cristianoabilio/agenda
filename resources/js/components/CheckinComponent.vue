@@ -4,7 +4,8 @@
         <div class="col-md-5 bg-primary text-white">Aguardando
             <ul class="list-group bg-primary">
                 <template v-for="(item, index) in items"  >
-                    <li v-on:click="toApprove(item.id, index)" class="list-group-item d-flex justify-content-between align-items-center text-secondary">{{ item.user.name }} - <strong>{{ item.class.modality.modality.name }}</strong> - {{ item.class.start }}
+                    <li v-on:click="toApprove(item.id, index)" class="list-group-item d-flex justify-content-between align-items-center text-secondary">
+                      <small>{{ item.user.name }} - <strong>{{ item.class.modality.modality.name }}</strong> - {{ item.class.start }}</small>
                         <span class="badge badge-primary badge-pill"> <i class="far fa-check-circle"></i></span>
                     </li>
                 </template>
@@ -14,7 +15,7 @@
             <ul class="list-group bg-success">
                 <template v-for="(item, index) in approved"  >
                     <li class="list-group-item d-flex justify-content-between align-items-center text-secondary">
-                      {{ item.user.name }} - <strong>{{ item.class.modality.modality.name }}</strong> - {{ item.class.start }}                        
+                      <small>{{ item.created_at | moment("DD/MM/YY") }} - {{ item.user.name }} - <strong>{{ item.class.modality.modality.name }}</strong> - {{ item.class.start }}</small>                        
                     </li>
                 </template>
             </ul>        

@@ -44,6 +44,7 @@ class CheckinController extends Controller
         }])
             ->where('status_id', $status_id)
             ->with('user')
+            ->orderBY('created_at', 'DESC')
             ->get();
 
         return json_encode([

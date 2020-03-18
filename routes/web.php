@@ -34,6 +34,12 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/modality', 'ModalityController@index')->name('modality');
     Route::post('/modality', 'ModalityController@store')->name('modality');
 
+
+    Route::get('/checkin', 'CheckinController@index')->name('checkin');
+    Route::post('/checkin', 'CheckinController@store')->name('checkin');
+    Route::post('/checkin/list', 'CheckinController@filter');
+    Route::post('/checkin/destroy', 'CheckinController@delete');
+
     Route::get('/classes', 'ClassesController@index')->name('classes');
     Route::post('/classes', 'ClassesController@store')->name('classes');
     Route::post('/classes/list', 'ClassesController@filter');

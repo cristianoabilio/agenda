@@ -25,6 +25,8 @@ Vue.use(VueTheMask)
 Vue.use(Notify)
 Vue.use(Notifications)
 Vue.use(VueToast);
+Vue.use(require('vue-moment'));
+
 
 
 Vue.use(VeeValidate, {
