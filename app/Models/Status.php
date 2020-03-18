@@ -14,4 +14,5 @@ class Status extends Model
     const INACTIVE = 2;
     const DELETED = 3;
     const RENOVED = 4;
+    const WAITING = 5;
 }

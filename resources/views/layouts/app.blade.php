@@ -40,6 +40,11 @@
                                     <a class="nav-link" href="{{ route('company') }}">Empresas</a>
                                 </li>
                             @endcan
+                            @can('viewAny',  \App\Models\Checkin::class)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('checkin') }}">Check-in</a>
+                                </li>
+                            @endcan
                             @can('viewAny',  \App\Models\Classes::class)
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('classes') }}">Aulas</a>
