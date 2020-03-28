@@ -26,6 +26,7 @@
       return {
       }
     },
+ 
     methods: {
         save(id, url) {
             let vThis = this;

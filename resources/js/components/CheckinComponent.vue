@@ -96,9 +96,39 @@
 
 
         
-      }     
+      },
+      create (id, url) {
+        let vThis = this;
+        let data = $("#"+id).serialize();
 
-    },
-    
-  }
+        let userId = (this.$root.userSelected) ? this.$root.userSelected.code : '';
+
+          
+            if (!userId) {
+              
+                $('#message').css('display', 'block');
+                return false;
+            } else {
+              $('#message').css('display', 'none');
+              let id = $('#id').val();
+              data = data+'&user_id='+userId;
+              axios.post(url, data)
+              .then(function (response) {
+                console.log(response.data.data);
+                if (response.data.status == 'success') {
+                    vThis.$emit('bv::hide::modal', 'create');
+
+                    vThis.$bvModal.hide('create')
+
+                    vThis.approved.push(response.data.data);                       
+                
+
+
+                    vThis.$root.mensagem('success', response.data.message)
+                }
+              });
+            }
+      }     
+    }
+  }      
 </script>

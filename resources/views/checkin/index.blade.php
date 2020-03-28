@@ -5,23 +5,26 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <h2>Check-in</h2>
+            <div class="overflow-auto"> 
+                <div class="card rounded bg-white d-flex flex-row align-items-center mb-0 p-2">       
+                    <div class="ml-auto">   
+                        <button class="btn btn-primary" v-b-modal.create><i class="fas fa-save"></i> Novo</button>
+                    </div>
+                </div>              
+            </div> 
+        </div>
+    </div>
+    <div class="row justify-content-center">   
+        <div class="col-md-12">             
             <checkin-component
                 :url="'/checkin/list/'"
+                :selected="{{$selected}}"
+                ref="modalities"
             ></checkin-component>
-
-            <b-modal id="create" title="Empresa"
-
-            >                
+            
+            <b-modal id="create" title="Check in">                
+                @include("checkin.forms.create")
             </b-modal>
-            <b-modal id="edit"  title="Empresa"
-
-            >                
-            </b-modal>
-
-            <b-modal id="delete"  title="Empresa" body-text-variant="danger"
-
-            >                
-            </b-modal>            
         </div>
     </div>
 </div>

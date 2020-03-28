@@ -7,24 +7,27 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
-import BootstrapVue from 'bootstrap-vue'
-import * as VeeValidate from 'vee-validate'
+import BootstrapVue from 'bootstrap-vue';
+import * as VeeValidate from 'vee-validate';
 import DatePicker from 'vue2-datepicker';
-import VueTheMask from 'vue-the-mask'
-import VueMask from 'v-mask'
-import Notify from 'vue2-notify'
-import Notifications from 'vue-notification'
+import VueTheMask from 'vue-the-mask';
+import VueMask from 'v-mask';
+import Notify from 'vue2-notify';
+import Notifications from 'vue-notification';
 import VueToast from 'vue-toast-notification';
+import vSelect from "vue-select";
+
 import 'vue-toast-notification/dist/index.css';
 
 
 
 
 Vue.use(VueMask);
-Vue.use(VueTheMask)
-Vue.use(Notify)
-Vue.use(Notifications)
+Vue.use(VueTheMask);
+Vue.use(Notify);
+Vue.use(Notifications);
 Vue.use(VueToast);
+Vue.use(vSelect);
 Vue.use(require('vue-moment'));
 
 
@@ -45,9 +48,11 @@ Vue.use(VeeValidate, {
 Vue.use(BootstrapVue)
 
 
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-import 'vue2-datepicker/index.css'
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
+import 'vue2-datepicker/index.css';
+import "vue-select/dist/vue-select.css";
+
 
 
 
@@ -63,6 +68,8 @@ import 'vue2-datepicker/index.css'
 Vue.component('table-pagination-component', require('./components/TablePaginationComponent.vue').default);
 Vue.component('checkbox-component', require('./components/CheckBoxComponent.vue').default);
 Vue.component('checkin-component', require('./components/CheckinComponent.vue').default);
+Vue.component("v-select", vSelect);
+
 
 
 /**
@@ -79,7 +86,8 @@ const app = new Vue({
           item: Object,
           time1: null,
           message: '',
-          responsable: String
+          responsable: String,
+          userSelected: null,
         }
     },
     methods: {

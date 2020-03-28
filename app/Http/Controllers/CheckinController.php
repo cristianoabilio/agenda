@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Classes;
 use App\Models\Checkin;
 use App\Models\Status;
 use App\Models\UserPlan;
@@ -24,7 +25,34 @@ class CheckinController extends Controller
      */
     public function index()
     {
-        return view('checkin.index', []);
+        $students = UserPlan::getStudents(Status::ACTIVE);
+
+
+        
+        $weekday = date('w');
+
+        $classes = Classes::where('weekday', $weekday)
+            ->with(['teacher' => function($query) {
+                $query->where('company_id', Auth::user()->company_id);
+            }])
+            ->with('modality.modality')
+            ->with('level')
+            ->get();
+
+        $schedule = [];
+        if ($classes) {
+            foreach ($classes as $c) {
+                $modality = ['id' => $c->id, 'name' => $c->modality->modality->name];
+                $schedule[] = $modality;
+            }
+        }
+
+
+        return view('checkin.index', [
+            'students' => $students,
+            'schedule' => collect($schedule),
+            'selected' => collect([])
+        ]);
     }
 
 
@@ -45,6 +73,7 @@ class CheckinController extends Controller
             ->where('status_id', $status_id)
             ->with('user')
             ->orderBY('created_at', 'DESC')
+            ->limit(5)
             ->get();
 
         return json_encode([
@@ -62,6 +91,72 @@ class CheckinController extends Controller
     {
         //
     }
+
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function company(Request $request)
+    {
+        $response = DB::transaction(function () use ($request) { 
+
+            $user_id = $request->input('user_id');
+            $classes = $request->input('class_id');
+
+            $status = 'success';
+            if ($user_id) {
+                $userPlan = UserPlan::where('user_id', $user_id)
+                    ->where('status_id', Status::ACTIVE)
+                    ->with(['plan' => function($query) {
+                        $query->with(['company' => function($query) {
+                            $query->where('id', Auth::user()->company_id);
+                        }]);
+                    }])    
+                    ->first();
+
+                if ($userPlan && $userPlan->available) {
+                    $request->merge([
+                        'status_id' => Status::ACTIVE
+                    ]);
+
+                    $checkin = Checkin::create($request->all());
+                    $message = 'Check in realizado com sucesso.';
+
+                    $userPlan->available = $userPlan->available-1;
+                    $userPlan->save();
+
+
+                    $checkin = Checkin::with(['class' => function($query) {
+                        $query->with(['teacher' => function($query) {
+                            $query->where('company_id', Auth::user()->company_id);
+                        }]);
+                        $query->with('modality.modality');
+                    }])
+                    ->where('id', $checkin->id)
+                    ->with('user')
+                    ->first();
+
+                    
+                } else {
+                    $message = 'O aluno não tem mais créditos disponíveis.';
+                    $status  = 'error';
+                }
+            }
+
+
+            return json_encode([
+                'status' => $status, 'action' => 'notify',
+                'message' => $message, 'data' => $checkin
+            ]);
+        });  
+        return $response;  
+
+
+    }    
+
 
     /**
      * Store a newly created resource in storage.
@@ -91,6 +186,11 @@ class CheckinController extends Controller
                 // atualiza creditos
                 $plan = UserPlan::where('user_id', $checkin->user_id)
                     ->where('status_id', Status::ACTIVE)
+                    ->with(['plan' => function($query) {
+                        $query->with(['company' => function($query) {
+                            $query->where('id', Auth::user()->company_id);
+                        }]);
+                    }]) 
                     ->first();
 
                 if ($plan->available > 0) {
