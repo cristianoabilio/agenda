@@ -83,6 +83,23 @@ class UserPlanController extends Controller
                     'discount' =>  number_format($request->input('discount'), 2, '.', ''),
                     'status_id' => Status::ACTIVE
                 ]);
+
+
+                $response = DB::transaction(function () use ($request, $planActive) {
+        
+                        $credit = UserPlan::create($request->all());
+                        
+                        $planActive->status_id = Status::RENOVED;
+                        $planActive->save();
+        
+                        $message = 'Crédito cadastrado com sucesso';
+                    
+                        
+                    return json_encode([
+                        'status' => 'success', 'action' => 'notify',
+                        'message' => $message, 'data' => $credit
+                    ]);
+                });
             } else {
                 $request->merge([
                     'price' => $plan->price,
@@ -93,24 +110,24 @@ class UserPlanController extends Controller
                     'discount' =>  number_format($request->input('discount'), 2, '.', ''),
                     'status_id' => Status::ACTIVE
                 ]);
+
+
+                $response = DB::transaction(function () use ($request) {
+        
+                        $credit = UserPlan::create($request->all());
+        
+                        $message = 'Crédito cadastrado com sucesso';
+                    
+                        
+                    return json_encode([
+                        'status' => 'success', 'action' => 'notify',
+                        'message' => $message, 'data' => $credit
+                    ]);
+                });
             }
         }
         
-        $response = DB::transaction(function () use ($request, $planActive) {
-            $id = $request->input('id');
 
-                $credit = UserPlan::create($request->all());
-                $planActive->status_id = Status::RENOVED;
-                $planActive->save();
-
-                $message = 'Crédito cadastrado com sucesso';
-            
-                
-            return json_encode([
-                'status' => 'success', 'action' => 'notify',
-                'message' => $message, 'data' => $credit
-            ]);
-        });
         return $response;
     }
 
