@@ -44,7 +44,7 @@ class CheckinController extends Controller
         $schedule = [];
         if ($classes) {
             foreach ($classes as $c) {
-                $modality = ['id' => $c->id, 'name' => $c->modality->modality->name];
+                $modality = ['id' => $c->id, 'name' => $c->modality->modality->name, 'start' => $c->start, 'level' => $c->level->name];
                 $schedule[] = $modality;
             }
         }

@@ -27,7 +27,7 @@
             <div class="form-group col-12" >
               @foreach ($schedule as $s)
                 <div class="checkbox">
-                  <label><input type="radio" name="class_id" value="{{ $s['id'] }}"> {{ $s['name'] }}</label>
+                  <label><input type="radio" name="class_id" value="{{ $s['id'] }}"> <strong>{{ $s['name'] }}</strong> - {{$s['level']}} - <small>{{ $s['start'] }}</small></label>
                 </div>
               @endforeach
             </div>
