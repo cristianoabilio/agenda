@@ -35,6 +35,9 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         @if (Auth::user()) 
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('stats') }}">Dashboard</a>
+                            </li>
                             @can('viewAny', \App\Models\Company::class)
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('company') }}">Empresas</a>

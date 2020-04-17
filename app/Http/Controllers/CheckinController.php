@@ -31,6 +31,7 @@ class CheckinController extends Controller
         
         $weekday = date('w');
 
+        //DB::enableQueryLog();
         $classes = Classes::where('weekday', $weekday)
             ->with(['teacher' => function($query) {
                 $query->where('company_id', Auth::user()->company_id);
@@ -38,6 +39,7 @@ class CheckinController extends Controller
             ->with('modality.modality')
             ->with('level')
             ->get();
+            //dd(DB::getQueryLog());
 
         $schedule = [];
         if ($classes) {

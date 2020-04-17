@@ -31,6 +31,12 @@ Route::group(['middleware' => 'auth'], function() {
     });
     
 
+
+    Route::get('/stats', 'ReportController@index')->name('stats');
+    Route::post('/stats/bubble', 'ReportController@bubble');
+    Route::post('/stats/line', 'ReportController@line');
+
+    
     Route::get('/modality', 'ModalityController@index')->name('modality');
     Route::post('/modality', 'ModalityController@store')->name('modality');
 

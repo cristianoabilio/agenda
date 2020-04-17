@@ -22,4 +22,8 @@ class Classes extends Model
     public function level() {
         return $this->hasOne('App\Models\Level', 'id', 'level_id');
     }
+
+    public function checkin() {
+        return $this->hasOne('App\Models\Checkin', 'id', 'class_id');
+    }
 }

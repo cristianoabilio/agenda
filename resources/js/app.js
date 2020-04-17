@@ -16,6 +16,14 @@ import Notify from 'vue2-notify';
 import Notifications from 'vue-notification';
 import VueToast from 'vue-toast-notification';
 import vSelect from "vue-select";
+import VueGoogleCharts from 'vue-google-charts'
+import VueCharts  from 'vue-charts'
+Vue.use(VueCharts)
+import VueGraph from 'vue-graph'
+ 
+Vue.use(VueGraph)
+
+
 
 import 'vue-toast-notification/dist/index.css';
 
@@ -29,6 +37,10 @@ Vue.use(Notifications);
 Vue.use(VueToast);
 Vue.use(vSelect);
 Vue.use(require('vue-moment'));
+Vue.use(VueGoogleCharts)
+
+
+
 
 
 
@@ -68,6 +80,8 @@ import "vue-select/dist/vue-select.css";
 Vue.component('table-pagination-component', require('./components/TablePaginationComponent.vue').default);
 Vue.component('checkbox-component', require('./components/CheckBoxComponent.vue').default);
 Vue.component('checkin-component', require('./components/CheckinComponent.vue').default);
+Vue.component('bubble-graph-component', require('./components/GraphComponent.vue').default);
+Vue.component('line-graph-component', require('./components/LineGraphComponent.vue').default);
 Vue.component("v-select", vSelect);
 
 
@@ -80,14 +94,14 @@ Vue.component("v-select", vSelect);
 
 const app = new Vue({
     el: '#app',
-    components: { DatePicker },
+    components: { DatePicker, VueGoogleCharts },    
     data() {
         return {
           item: Object,
           time1: null,
           message: '',
           responsable: String,
-          userSelected: null,
+          userSelected: null,          
         }
     },
     methods: {
@@ -131,6 +145,7 @@ const app = new Vue({
           break;                                       
         }
       },
+      
   },
 });
 window.app = app;
