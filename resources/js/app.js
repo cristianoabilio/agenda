@@ -82,6 +82,7 @@ Vue.component('checkbox-component', require('./components/CheckBoxComponent.vue'
 Vue.component('checkin-component', require('./components/CheckinComponent.vue').default);
 Vue.component('bubble-graph-component', require('./components/GraphComponent.vue').default);
 Vue.component('line-graph-component', require('./components/LineGraphComponent.vue').default);
+Vue.component('bar-graph-component', require('./components/GraphBarComponent.vue').default);
 Vue.component("v-select", vSelect);
 
 

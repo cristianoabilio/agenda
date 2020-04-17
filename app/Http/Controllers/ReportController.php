@@ -25,7 +25,11 @@ class ReportController extends Controller
      */
     public function index()
     {
+        return view('report.index');
+    }
 
+    public function bar(Request $request) 
+    {
         $from = strtotime("-7 days");
         $today = date('Y-m-d');
 
@@ -95,17 +99,15 @@ class ReportController extends Controller
 
         }
 
-        return view('report.index', [
-            //'columns' => json_encode(array_values($columns)),
-            'columns' => json_encode($columns),
+        return response()->json([
+            'status' => 'success', 
+            'columns' => $columns,
             'to' => $today,
             'from' => $from,
-            'labels' => json_encode($labels),
-            'values' => json_encode($rows),
-            'valuesBubble' => json_encode($totalDay)
+            'labels' => $labels,
+            'values' => $rows,
         ]);
     }
-
 
 
     public function bubble(Request $request)

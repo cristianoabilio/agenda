@@ -8,17 +8,7 @@
         </div>
         <div class="col-md-5 border border-info">
             <p class="">Modalidades</p>
-            <graph-bar
-                    :width="450"
-                    :height="350"
-                    :axis-min="0"
-                    :axis-max="30"
-                    :labels="{{$labels}}"
-                    :values="{{$values}}">
-                <note :text="'Check in por Modalidade'"></note>
-                <tooltip :names="{{$columns}}" :position="'left'"></tooltip>
-                <legends :names="{{$columns}}" :filter="true"></legends>
-            </graph-bar>
+            <bar-graph-component /> 
 
             </div>
         <div class="col-md-1">

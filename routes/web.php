@@ -33,6 +33,7 @@ Route::group(['middleware' => 'auth'], function() {
 
 
     Route::get('/stats', 'ReportController@index')->name('stats');
+    Route::post('/stats/bar', 'ReportController@bar');
     Route::post('/stats/bubble', 'ReportController@bubble');
     Route::post('/stats/line', 'ReportController@line');
 
