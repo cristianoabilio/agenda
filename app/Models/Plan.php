@@ -10,6 +10,8 @@ class Plan extends Model
     protected $primaryKey = 'id';
     protected $fillable = ['name', 'status_id', 'company_id', 'description', 'price', 'validity', 'type', 'quantidity', 'created_at'];
 
+    const EXPERIMENTAL = 'E';
+
     public function company()
     {
         return $this->belongsTo('App\Models\Company');

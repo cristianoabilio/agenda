@@ -25,7 +25,43 @@ class ReportController extends Controller
      */
     public function index()
     {
-        return view('report.index');
+        $start = date('Y-m-d H:i:s', strtotime(date('Y-m-d 00:00:00')."-30 days"));
+        $end = date('Y-m-d H:i:s', strtotime(date('Y-m-d 23:59:59')));
+        $visitors = $totalPlan = 0;
+
+        $plans = Plan::where('company_id', Auth::user()->company_id)
+            ->where('type', Plan::EXPERIMENTAL)
+            ->where('status_id', Status::ACTIVE)
+            ->get()->pluck('id');
+
+        if ($plans) {
+            $visitors = UserPlan::whereIn('plan_id', $plans)
+            ->whereBetween('created_at', [$start, $end])
+            ->get()->count();
+        }
+
+        $plans = Plan::where('company_id', Auth::user()->company_id)
+            ->where('status_id', Status::ACTIVE)
+            ->where('type', '<>', Plan::EXPERIMENTAL)
+            ->get()->pluck('id');
+
+        $totalPlan = UserPlan::whereIn('plan_id', $plans)
+            ->whereBetween('created_at', [$start, $end])
+            ->get()->count();    
+
+        $money = UserPlan::whereIn('plan_id', $plans)
+            ->whereBetween('created_at', [$start, $end])
+            ->get()->sum('price');       
+
+        $discount = UserPlan::whereIn('plan_id', $plans)
+            ->whereBetween('created_at', [$start, $end])
+            ->get()->sum('discount');       
+
+        return view('report.index', [
+            'visitors' => $visitors,
+            'total'    => $totalPlan,
+            'money'     => ($money-$discount)
+        ]);
     }
 
     public function bar(Request $request) 
