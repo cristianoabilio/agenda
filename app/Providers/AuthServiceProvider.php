@@ -6,12 +6,14 @@ use App\Models\Checkin;
 use App\Models\Classes;
 use App\Models\Company;
 use App\Models\CompanyModality;
+use App\Models\Plan;
 use App\Models\UserPlan;
 
 use App\Policies\CheckinPolicy;
 use App\Policies\ClassesPolicy;
 use App\Policies\CompanyPolicy;
 use App\Policies\CompanyModalityPolicy;
+use App\Policies\PlanPolicy;
 use App\Policies\UserPlanPolicy;
 
 use Illuminate\Support\Facades\Gate;
@@ -25,13 +27,14 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $policies = [
-        // 'App\Model' => 'App\Policies\ModelPolicy',
+    protected $policies = [        
+        Checkin::class => CheckinPolicy::class,    
         Classes::class => ClassesPolicy::class,
         Company::class => CompanyPolicy::class,
         CompanyModality::class => CompanyModalityPolicy::class,        
+        Plan::class => PlanPolicy::class,      
         UserPlan::class => UserPlanPolicy::class,      
-        Checkin::class => CheckinPolicy::class,      
+          
     ];
 
     /**

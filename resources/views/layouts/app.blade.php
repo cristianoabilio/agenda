@@ -58,6 +58,11 @@
                                     <a class="nav-link" href="{{ route('user-plan') }}">Créditos</a>
                                 </li>
                             @endcan
+                            @can('viewAny',  \App\Models\Plan::class)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('plan') }}">Planos</a>
+                                </li>
+                            @endcan
                             @can('viewAny',  \App\Models\CompanyModality::class)
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('modality') }}">Modalidades</a>

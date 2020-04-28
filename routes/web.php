@@ -30,7 +30,10 @@ Route::group(['middleware' => 'auth'], function() {
         
     });
     
-
+    Route::get('/plan', 'PlanController@index')->name('plan');
+    Route::post('/plan', 'PlanController@store')->name('plan');
+    Route::post('/plan/list', 'PlanController@filter');
+    Route::post('/plan/destroy', 'PlanController@delete');
 
     Route::get('/stats', 'ReportController@index')->name('stats');
     Route::post('/stats/bar', 'ReportController@bar');

@@ -12,6 +12,8 @@ class Plan extends Model
 
     const EXPERIMENTAL = 'E';
 
+    const TYPES = ['C' => 'Créditos', 'M' => 'Mensalidade', 'E' => 'Experimental'];
+
     public function company()
     {
         return $this->belongsTo('App\Models\Company');
