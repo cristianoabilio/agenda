@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Date;
 use App\Models\Classes;
 use App\Models\Checkin;
 use App\Models\Status;
@@ -63,9 +64,10 @@ class CheckinController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function filter(Request $request)
+    public function history(Request $request)
     {
         $status_id = $request->input('status_id', Status::WAITING);
+
         $checkins = Checkin::with(['class' => function($query) {
             $query->with(['teacher' => function($query) {
                 $query->where('company_id', Auth::user()->company_id);
@@ -76,6 +78,38 @@ class CheckinController extends Controller
             ->with('user')
             ->orderBY('created_at', 'DESC')
             ->limit(5)
+            ->get();
+
+        return view('checkin.history', [
+
+        ]);
+    } 
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function filter(Request $request)
+    {
+        $status_id = $request->input('status_id', Status::ACTIVE);
+        $start = $request->input('start');
+        $end = $request->input('end');
+        $date = new Date();
+
+        $start = ($start) ? $date->dateToSql($start) : date('Y-m-d H:i:s', strtotime(date('Y-m-d 00:00:00')."-30 days"));
+        $end = ($end) ? $date->dateToSql($end) : date('Y-m-d H:i:s', strtotime(date('Y-m-d 00:00:00')));
+
+        $checkins = Checkin::with(['class' => function($query) {
+            $query->with(['teacher' => function($query) {
+                $query->where('company_id', Auth::user()->company_id);
+            }]);
+            $query->with('modality.modality');
+        }])
+            ->whereBetween('created_at', [$start, $end])
+            ->where('status_id', $status_id)
+            ->with('user')
+            ->orderBY('created_at', 'DESC')
             ->get();
 
         return json_encode([

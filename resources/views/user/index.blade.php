@@ -13,6 +13,7 @@
                 :name="'user'"         
                 :per-page="5" 
                 :url="'/users/list/'"
+                :new="true"
                 :fields="[
                     'index',
                     { 'key' : 'id', 'sortable' : true, 'label' : '#' },

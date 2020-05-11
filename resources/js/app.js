@@ -18,6 +18,13 @@ import VueToast from 'vue-toast-notification';
 import vSelect from "vue-select";
 import VueGoogleCharts from 'vue-google-charts'
 import VueCharts  from 'vue-charts'
+import Datepicker from 'vuejs-datepicker';
+import moment from 'moment'
+import {en, ptBR} from 'vuejs-datepicker/dist/locale'
+
+
+
+
 Vue.use(VueCharts)
 import VueGraph from 'vue-graph'
  
@@ -95,7 +102,7 @@ Vue.component("v-select", vSelect);
 
 const app = new Vue({
     el: '#app',
-    components: { DatePicker, VueGoogleCharts },    
+    components: { DatePicker, VueGoogleCharts, Datepicker },    
     data() {
         return {
           item: Object,
@@ -103,9 +110,13 @@ const app = new Vue({
           message: '',
           responsable: String,
           userSelected: null,          
+          ptBR: ptBR
         }
     },
     methods: {
+      customFormatter(date) {
+        return moment(date).format('D/M/YYYY');
+      },
       mensagem (type, message) {
         console.log('teste') 
         this.$toast.open({

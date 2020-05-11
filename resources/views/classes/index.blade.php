@@ -13,6 +13,7 @@
                 :name="'classes'"         
                 :per-page="20" 
                 :url="'/classes/list/'"
+                :new="true"
                 :fields="[
                     'index',
                     { 'key' : 'id', 'sortable' : true, 'label' : '#' },

@@ -13,6 +13,7 @@
                 :name="'plan'"         
                 :per-page="5" 
                 :url="'/plan/list/'"
+                :new="true"
                 :fields="[
                     { 'key' : 'name', 'sortable' : true, 'label' : 'Nome' },
                     { 'key' : 'description', 'sortable' : true, 'label' : 'Descrição' },

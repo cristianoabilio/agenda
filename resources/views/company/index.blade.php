@@ -12,6 +12,7 @@
                 :url="'/company/list/'"            
                 :per-page="1" 
                 :items="{{$items}}"
+                :new="true"
                 :fields="[
                     'index',
                     { 'key' : 'id', 'sortable' : true, 'label' : '#' },

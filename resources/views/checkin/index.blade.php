@@ -8,7 +8,10 @@
             <div class="overflow-auto"> 
                 <div class="card rounded bg-white d-flex flex-row align-items-center mb-0 p-2">       
                     <div class="ml-auto">   
-                        <button class="btn btn-primary" v-b-modal.create><i class="fas fa-save"></i> Novo</button>
+                        <button class="btn btn-primary" v-b-modal.create><i class="fas fa-save"></i> Novo</button> 
+                        @can('viewAny',  \App\Models\Checkin::class)                     
+                        <a href="/checkin/history" class="btn btn-white" ><i class="fas fa-history"></i> Histórico</a>
+                        @endcan
                     </div>
                 </div>              
             </div> 

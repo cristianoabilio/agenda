@@ -3,7 +3,9 @@
     <div class="card rounded bg-white d-flex flex-row align-items-center mb-0 p-2">       
         <div class="ml-auto">   
             <span class="h3 text-primary sn"></span><span id="total">{{total}} <strong>total</strong></span>
-            <button class="btn btn-primary" v-b-modal.create><i class="fas fa-save"></i> Novo</button>
+            <template v-if="this.new == true">
+              <button class="btn btn-primary" v-b-modal.create><i class="fas fa-save"></i> Novo</button>
+            </template>
         </div>
     </div>  
     <b-table
@@ -41,14 +43,26 @@
               <template v-if="column.key == 'modality'">                  
                 {{ data.item.modality.modality.name }}
               </template>  
+
+              <template v-if="column.key == 'class'">                  
+                {{ data.item.class.modality.modality.name }}
+              </template> 
+
               <template v-if="column.key == 'level'">                  
                 {{ data.item.level.name }}
+              </template>      
+              <template v-if="column.key == 'user'">                  
+                {{ data.item.user.name }}
               </template>              
             </span> 
 
             <span v-else-if="column.key == 'weekday'">
               {{ weekday(data.item[column.key]) }}
             </span>  
+
+            <span v-else-if="column.key == 'created_at'">
+              {{ data.item[column.key] | moment("DD/MM/YY H:mm:ss") }}
+            </span> 
 
             <span v-else-if="data.field.type == 'buttons'">
               <b-btn variant="success" v-b-modal.create v-bind:item="data.item" @click="sendInfo(data.item)">
@@ -94,7 +108,8 @@
         fields: Array,
         url: String,
         name: String,
-        type: String
+        type: String,
+        new: Boolean
     },      
     data: function() {
       return {
