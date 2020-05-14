@@ -62,6 +62,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('/user-plan', 'UserPlanController@store')->name('user-plan');
     Route::post('/user-plan/list', 'UserPlanController@filter');
     Route::post('/user-plan/destroy', 'UserPlanController@delete');
+    Route::post('/user-plan/expiration', 'UserPlanController@expiration');
 
 
     Route::get('/users', 'UserController@index')->name('users');

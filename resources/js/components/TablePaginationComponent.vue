@@ -109,17 +109,18 @@
         url: String,
         name: String,
         type: String,
-        new: Boolean
+        new: Boolean,
     },      
     data: function() {
       return {
         currentPage: 1,
-        item: Object,
-        items: Array, 
+        item: Object,        
         total: Number,
         boxTwo: '',
         index: Number,
-        responsable: String
+        responsable: String,
+                items: Array, 
+
       }
     },
     computed: {
@@ -360,6 +361,7 @@
       },      
       deleteUser() {
         console.log('delete');
+
         let vThis = this;
         let data = $("#form-delete-user").serialize();
         
@@ -405,6 +407,7 @@
       search (id, url) {
         let vThis = this;
         let data = $("#"+id).serialize();
+        $('#expiration').css('display', 'none');
 
         console.log(data);
         this.$validator.validateAll(id).then(valid => {

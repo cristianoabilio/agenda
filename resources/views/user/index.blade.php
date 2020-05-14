@@ -15,7 +15,6 @@
                 :url="'/users/list/'"
                 :new="true"
                 :fields="[
-                    'index',
                     { 'key' : 'id', 'sortable' : true, 'label' : '#' },
                     { 'key' : 'name', 'sortable' : true, 'label' : 'Nome' },
                     { 'key' : 'email', 'sortable' : true, 'label' : 'E-mail' },

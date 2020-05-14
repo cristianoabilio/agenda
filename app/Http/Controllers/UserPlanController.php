@@ -21,13 +21,14 @@ class UserPlanController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-
+    {       
         $plans = Plan::where('company_id', Auth::user()->company_id)
                     ->where('status_id', Status::ACTIVE)
                     ->get();
 
-        return view('user.plan.index', ['plans' => $plans]);        
+        return view('user.plan.index', [
+            'plans' => $plans,            
+        ]);        
 
     }
 
@@ -201,4 +202,47 @@ class UserPlanController extends Controller
             }
         }
     }    
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function expiration(Request $request)
+    {
+        $date = date('Y-m-d H:i:s', strtotime(date('Y-m-d 00:00:00')."+7 days"));   
+        $items = [];
+
+        $userPlan = UserPlan::where('status_id', Status::ACTIVE)
+                    ->where('end', '<=', $date)
+                    ->with('user')
+                    ->with(['plan' => function($query) {
+                        $query->with(['company' => function($query) {
+                            $query->where('id', Auth::user()->company_id);
+                        }]);
+                    }])->get();
+
+        if ($userPlan) {
+            foreach ($userPlan as $plan) {
+                $item = new \stdClass;
+                $date = new Date();
+
+                $item->id = $plan->user->id;
+                $item->name = $plan->user->name;
+                $item->email = $plan->user->email;
+                $item->available = $plan->available;
+                $item->end = $date->dateFromSql($plan->end);
+                $item->plan_id = $plan->id;
+                $item->plan_status = $plan->status_id;
+                $item->status_name = ($plan->status_id == Status::ACTIVE) ? 'Ativo' : 'Expirado';
+                $items[] = $item;
+            }
+        }
+
+        return json_encode([
+            'status' => 'success', 
+             'data' => $items,
+             'message' => 'Busca realizada'
+        ]);
+    }
 }

@@ -110,7 +110,7 @@ const app = new Vue({
           message: '',
           responsable: String,
           userSelected: null,          
-          ptBR: ptBR
+          ptBR: ptBR,
         }
     },
     methods: {

@@ -25,15 +25,16 @@
                 
             </div>             
             
-            <div id="studants" style="display: none">
+
+
+            <div id="studants">
                 <table-pagination-component        
                     ref="users"
                     :name="'user'"         
                     :per-page="5" 
-                    :url="'/users/list/'"
+                    :url="'/user-plan/expiration'"
                     :new="true"
                     :fields="[
-                        'index',
                         { 'key' : 'id', 'sortable' : true, 'label' : '#' },
                         { 'key' : 'name', 'sortable' : true, 'label' : 'Nome' },
                         { 'key' : 'email', 'sortable' : true, 'label' : 'E-mail' },
