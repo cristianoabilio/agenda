@@ -30,6 +30,13 @@ Route::group(['middleware' => 'auth'], function() {
         
     });
     
+    Route::get('/email', function() {
+        Mail::send('emails.test', ['name' => 'Silveira', 'email' => 'emaildosilveira@gmail.com', 'password' => '12341234'], function($m) {
+            $m->subject('GymMate - Boas vindas');
+            $m->from('cristianocafr@gmail.com');
+            $m->to('ext.cristiano@havea.com.br');
+        });
+    });
     Route::get('/plan', 'PlanController@index')->name('plan');
     Route::post('/plan', 'PlanController@store')->name('plan');
     Route::post('/plan/list', 'PlanController@filter');

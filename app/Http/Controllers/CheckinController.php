@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Helpers\Date;
+use App\Mail\SendCheckinMail;
 use App\Models\Classes;
 use App\Models\Checkin;
 use App\Models\Status;
@@ -11,6 +13,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class CheckinController extends Controller
 {
@@ -175,6 +178,8 @@ class CheckinController extends Controller
                     ->with('user')
                     ->first();
 
+                    $to = 'cristianocafr@gmail.com';
+                    Mail::to($to)->send(new SendCheckinMail($checkin, $userPlan)); 
                     
                 } else {
                     $message = 'O aluno não tem mais créditos disponíveis.';
@@ -234,6 +239,9 @@ class CheckinController extends Controller
                     $plan->save();
                 }
            
+
+                $to = 'cristianocafr@gmail.com';
+                Mail::to($to)->send(new SendCheckinMail($checkin, $plan)); 
                 $message = 'Check in realizado com sucesso';
             }
 

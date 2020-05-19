@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Mail\SendMailWelcome;
 use App\Models\Status;
 use App\Models\Profile;
 
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use App\Helpers\Date;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -128,10 +130,15 @@ class UserController extends Controller
                     ]);
                 }
 
+                $password = str_random(40);
                 $request->merge([
-                    'password' => str_random(40)
+                    'password' => $password
                 ]);
                 $user = User::create($request->all());
+                $user->password = $password;
+
+                $to = 'cristianocafr@gmail.com';
+                Mail::to($to)->send(new SendMailWelcome($user));
                 $message = 'Usuário cadastrado com sucesso';
             }
 

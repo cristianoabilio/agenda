@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+
+use App\Mail\SendNewPlan;
 use App\Models\UserPlan;
 use App\Models\Plan;
 use App\Models\Status;
@@ -9,9 +11,11 @@ use App\User;
 use App\Helpers\Date;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use  App\Http\Requests\Credit\Store;
+
 
 class UserPlanController extends Controller
 {
@@ -86,7 +90,7 @@ class UserPlanController extends Controller
                 ]);
 
 
-                $response = DB::transaction(function () use ($request, $planActive) {
+                $response = DB::transaction(function () use ($request, $planActive, $user) {
         
                         $credit = UserPlan::create($request->all());
                         
@@ -95,6 +99,8 @@ class UserPlanController extends Controller
         
                         $message = 'Crédito cadastrado com sucesso';
                     
+                        $to = 'cristianocafr@gmail.com';
+                        Mail::to($to)->send(new SendNewPlan($user, $credit)); 
                         
                     return json_encode([
                         'status' => 'success', 'action' => 'notify',
@@ -113,13 +119,15 @@ class UserPlanController extends Controller
                 ]);
 
 
-                $response = DB::transaction(function () use ($request) {
+                $response = DB::transaction(function () use ($request, $user) {
         
                         $credit = UserPlan::create($request->all());
         
                         $message = 'Crédito cadastrado com sucesso';
                     
-                        
+                        $to = 'cristianocafr@gmail.com';
+                        Mail::to($to)->send(new SendNewPlan($user, $credit)); 
+                                               
                     return json_encode([
                         'status' => 'success', 'action' => 'notify',
                         'message' => $message, 'data' => $credit
@@ -127,6 +135,8 @@ class UserPlanController extends Controller
                 });
             }
         }
+        
+
         
 
         return $response;
@@ -151,6 +161,7 @@ class UserPlanController extends Controller
      */
     public function edit(UserPlan $userPlan)
     {
+
         //
     }
 
