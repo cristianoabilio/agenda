@@ -55,12 +55,39 @@ class ReportController extends Controller
 
         $discount = UserPlan::whereIn('plan_id', $plans)
             ->whereBetween('created_at', [$start, $end])
-            ->get()->sum('discount');       
+            ->get()->sum('discount');   
+            
+            
+             
+                
 
+
+        //DB::enableQueryLog();
+        $checkins = Checkin::groupBy('class_id')
+        ->join('classes', 'classes.id', '=', 'checkin.class_id')
+        ->join('users', 'users.id', '=', 'classes.teacher_id')
+        ->where('users.company_id', Auth::user()->company_id)
+        ->whereBetween('checkin.created_at', [$start, $end])
+        ->selectRaw('count(*) as total, class_id')
+        ->limit(3)
+        ->get();
+        //dd(DB::getQueryLog());
+
+
+        $classes = [];
+        if ($checkins) {
+            foreach ($checkins as $class) {
+                $classes[] = Classes::where('id', $class->class_id)->first();
+            }
+        }
+        
+
+        //dd($classes);
         return view('report.index', [
             'visitors' => $visitors,
             'total'    => $totalPlan,
-            'money'     => ($money-$discount)
+            'money'     => ($money-$discount),
+            'ranking'   => $classes
         ]);
     }
 

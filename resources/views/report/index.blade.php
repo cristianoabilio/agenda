@@ -63,6 +63,20 @@
                     </p>
                 </div> <!-- end card-body-->
             </div>
+            <div class="card widget-flat">
+                <div class="card-body">
+                    <div class="float-right">                        
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <h5 class="text-muted font-weight-normal mt-0" title="Top 3 Turmas">Top 3 Turmas</h5>
+                    @foreach ($ranking as $class)
+                        <h4 class="mt-3 mb-3 text-success">{{$class->modality->modality->name }} - {{$class->start }} - {{ $class->teacher->name }}</h4>
+                    @endforeach
+                    <p class="mb-0 text-muted">
+                        <span class="text-nowrap small">Nos últimos 30 dias em R$</span>  
+                    </p>
+                </div> <!-- end card-body-->
+            </div>
         </div>
     </div>
 </div>
