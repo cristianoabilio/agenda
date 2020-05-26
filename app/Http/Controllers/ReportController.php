@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Checkin;
 use App\Models\Classes;
+use App\Models\Company;
 use App\Models\CompanyModality;
 use App\Models\Plan;
 use App\Models\UserPlan;
@@ -24,7 +25,7 @@ class ReportController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {        
         $start = date('Y-m-d H:i:s', strtotime(date('Y-m-d 00:00:00')."-30 days"));
         $end = date('Y-m-d H:i:s', strtotime(date('Y-m-d 23:59:59')));
         $visitors = $totalPlan = 0;
@@ -74,6 +75,21 @@ class ReportController extends Controller
         //dd(DB::getQueryLog());
 
 
+        $totalCheckins = Checkin::join('classes', 'classes.id', '=', 'checkin.class_id')
+        ->join('users', 'users.id', '=', 'classes.teacher_id')
+        ->where('users.company_id', Auth::user()->company_id)  
+        ->where('checkin.status_id', Status::ACTIVE)      
+        ->get()->count();
+
+        $totalClasses = Checkin::groupBy('date')
+        ->join('classes', 'classes.id', '=', 'checkin.class_id')
+        ->join('users', 'users.id', '=', 'classes.teacher_id')
+        ->where('users.company_id', Auth::user()->company_id)  
+        ->where('checkin.status_id', Status::ACTIVE)
+        ->selectRaw('DATE_FORMAT(checkin.created_at, "%Y-%m-%d") as date')
+        ->groupBy('class_id')->get()->count();
+
+
         $classes = [];
         if ($checkins) {
             foreach ($checkins as $class) {
@@ -87,7 +103,8 @@ class ReportController extends Controller
             'visitors' => $visitors,
             'total'    => $totalPlan,
             'money'     => ($money-$discount),
-            'ranking'   => $classes
+            'ranking'   => $classes,
+            'average'   => ($totalClasses) ? $totalCheckins/$totalClasses : 0
         ]);
     }
 

@@ -15,7 +15,7 @@ class Checkin extends Model
     }
 
     public function class() {
-        return $this->hasMany('App\Models\Classes', 'id', 'class_id');
+        return $this->hasOne('App\Models\Classes', 'id', 'class_id');
     }
 
 }

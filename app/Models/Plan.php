@@ -8,7 +8,11 @@ class Plan extends Model
 {
     protected $table = 'plano';
     protected $primaryKey = 'id';
-    protected $fillable = ['name', 'status_id', 'company_id', 'description', 'price', 'validity', 'type', 'quantidity', 'created_at'];
+    protected $fillable = [
+        'name', 'status_id', 'company_id', 
+        'description', 'price', 'validity', 'type',
+        'quantidity', 'created_at'
+    ];
 
     const EXPERIMENTAL = 'E';
 
@@ -16,6 +20,11 @@ class Plan extends Model
 
     public function company()
     {
-        return $this->belongsTo('App\Models\Company');
+        return $this->belongsTo('App\Models\Company', 'company_id', 'id');
+    }
+
+
+    public function users() {
+        return $this->hasOne('App\Models\UserPlan', 'plan_id', 'id');
     }
 }
