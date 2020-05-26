@@ -4,18 +4,24 @@ namespace App\Http\Controllers;
 
 
 use App\Mail\SendNewPlan;
+use App\Mail\SendMailWelcome;
 use App\Models\UserPlan;
 use App\Models\Plan;
+use App\Models\Profile;
 use App\Models\Status;
+
 use App\User;
 use App\Helpers\Date;
+
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use  App\Http\Requests\Credit\Store;
+use Illuminate\Support\Facades\Validator;
 
+use  App\Http\Requests\Credit\Store;
+use  App\Http\Requests\Users\StoreUser;
 
 class UserPlanController extends Controller
 {
@@ -52,11 +58,47 @@ class UserPlanController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Store $request)
+    public function store(StoreUser $request)
     {
-
-        $user = User::where('id', $request->input('user_id'))->first();
+        $id = $request->input('id');
+        
         $plan = Plan::where('id', $request->input('plan_id'))->first();
+
+
+        if ($id) {
+            $user = User::where('id', $id)->first();
+        } else {
+
+            $date = new Date();
+            $request->merge([
+                'document' => preg_replace('/[^0-9]/', '', $request->input('document')),
+                'cellphone' => preg_replace('/[^0-9]/', '', $request->input('cellphone')),
+                'birthday'  => $date->dateToSql($request->input('birthday')),
+                'profile_id'    => Profile::STUDENT,
+                'status_id'     => Status:: ACTIVE
+            ]);
+
+
+            $company_id = Auth::user()->company_id;
+
+            if ($company_id) {
+                $request->merge([
+                    'company_id' => $company_id
+                ]);
+            }
+
+            $password = str_random(40);
+            $request->merge([
+                'password' => $password
+            ]);
+            $user = User::create($request->all());
+            $user->password = $password;
+
+            $to = 'cristianocafr@gmail.com';
+            Mail::to($to)->send(new SendMailWelcome($user));
+            $message = 'Usuário cadastrado com sucesso';
+        }
+        
 
         if ($user) {
             $planActive = UserPlan::where('user_id', $user->id)
@@ -86,7 +128,8 @@ class UserPlanController extends Controller
                     'validity' => $plan->validity,
                     'end'       => date('Y-m-d', strtotime('+'.$plan->validity.' days',strtotime($end))),
                     'discount' =>  number_format($request->input('discount'), 2, '.', ''),
-                    'status_id' => Status::ACTIVE
+                    'status_id' => Status::ACTIVE,
+                    'user_id'   => $user->id
                 ]);
 
 
@@ -115,7 +158,8 @@ class UserPlanController extends Controller
                     'start' => date('Y-m-d'),
                     'end'       => date('Y-m-d', strtotime('+'.$plan->validity.' days')),
                     'discount' =>  number_format($request->input('discount'), 2, '.', ''),
-                    'status_id' => Status::ACTIVE
+                    'status_id' => Status::ACTIVE,
+                    'user_id'   => $user->id
                 ]);
 
 

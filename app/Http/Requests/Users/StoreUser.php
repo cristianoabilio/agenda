@@ -31,9 +31,9 @@ class StoreUser extends FormRequest
             'status_id'        => 'required',
             'cellphone'        => 'required|celular_com_ddd',
             'phone'         => 'nullable|telefone_com_ddd',
-            'birthday'    => 'required|data',
+            'birthday'    => 'data',
             'document'           => 'required|cpf|formato_cpf',
-            'gender'        => 'required',
+            'gender'        => 'nullable',
             'email'         => 'required|email',
             'name'          => 'required|min:3|max:140'
         ];

@@ -14,28 +14,28 @@
         <div class="row">
             <div class="form-group col-12">            
                 <label>Nome</label>
-                <input type="text" name="name" id="name" class="form-control-plaintext" v-validate="'required'">
+                <input type="text" name="name" id="name" v-model="item.name" class="form-control-plaintext" v-validate="'required'">
             </div>
         </div>
     
         <div class="row">
             <div class="form-group col-12">
                 <label>Email</label>
-                <input type="email" name="email" id="email"  class="form-control-plaintext" v-validate="'required|email'">
+                <input type="email" name="email" id="email" v-model="item.email" class="form-control-plaintext" v-validate="'required|email'">
             </div>
         </div>
 
         <div class="row">
             <div class="form-group col-12">
                 <label>Telefone</label>
-                <input type="tel" name="cellphone" id="cellphone" v-mask="'(##)####-####'"  class="form-control-plaintext" v-validate="'required'">
+                <input type="tel" name="cellphone" id="cellphone" v-mask="'(##)####-####'" v-model="item.cellphone" class="form-control-plaintext" v-validate="'required'">
             </div>
         </div>
         
         <div class="row">
             <div class="form-group col-12">
                 <label>CPF</label>
-                <input type="text" name="document" id="document" v-mask="'###.###.###-##'"  class="form-control-plaintext" v-validate="'required'">
+                <input type="text" name="document" id="document" v-mask="'###.###.###-##'" v-model="item.document"  class="form-control-plaintext" v-validate="'required'">
             </div>
         </div>
 
@@ -61,7 +61,7 @@
             </div>
         </div>
     
-        <input type="hidden" id="user_id" name="user_id"  />
+        <input type="hidden" id="id" v-model="item.id" name="id"  />
         <input type="hidden" id="company_id" name="company_id" />
         <input type="hidden" id="status_id" name="status_id"  value="1" />
         

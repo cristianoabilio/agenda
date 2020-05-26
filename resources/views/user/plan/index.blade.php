@@ -58,6 +58,11 @@
             >                
                 @include("user.plan.create")
             </b-modal>
+            <b-modal id="plan" title="Créditos"
+
+            >                
+                @include("user.plan.plan")
+            </b-modal>
             <b-modal id="delete" title="Créditos"
 
             >                

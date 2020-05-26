@@ -65,7 +65,7 @@
             </span> 
 
             <span v-else-if="data.field.type == 'buttons'">
-              <b-btn variant="success" v-b-modal.create v-bind:item="data.item" @click="sendInfo(data.item)">
+              <b-btn variant="success" v-b-modal.plan v-bind:item="data.item" @click="sendInfo(data.item)">
                 Adicionar
               </b-btn>
               <template v-if="data.item['plan_status'] == 1">
@@ -119,7 +119,7 @@
         boxTwo: '',
         index: Number,
         responsable: String,
-                items: Array, 
+        items: Array, 
 
       }
     },
@@ -160,11 +160,12 @@
         }
       },
 
-      create (id, url) {
+      create (id, url) {        
         let vThis = this;
         let data = $("#"+id).serialize();
 
         this.$validator.validateAll(id).then(valid => {
+          console.log('aqui 2');
             if (!valid) {
               vThis.$root.mensagem('error', 'Preencha todos os campos obrigatórios')
 
@@ -182,6 +183,7 @@
                     vThis.$emit('bv::hide::modal', 'create');
 
                     vThis.$bvModal.hide('create')
+                    vThis.$bvModal.hide('plan')
 
                     vThis.items.push(response.data.data);                       
 
