@@ -39,6 +39,7 @@ Route::group(['middleware' => 'auth'], function() {
     });
     Route::get('/plan', 'PlanController@index')->name('plan');
     Route::post('/plan', 'PlanController@store')->name('plan');
+    Route::get('/plan/history', 'PlanController@history');
     Route::post('/plan/list', 'PlanController@filter');
     Route::post('/plan/destroy', 'PlanController@delete');
 
@@ -68,6 +69,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/user-plan', 'UserPlanController@index')->name('user-plan');
     Route::post('/user-plan', 'UserPlanController@store')->name('user-plan');
     Route::post('/user-plan/list', 'UserPlanController@filter');
+    Route::post('/user-plan/history', 'UserPlanController@history');
     Route::post('/user-plan/destroy', 'UserPlanController@delete');
     Route::post('/user-plan/expiration', 'UserPlanController@expiration');
 

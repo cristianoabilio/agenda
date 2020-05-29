@@ -7,7 +7,15 @@
         <div class="col-md-12">
             <h2>Planos</h2>
         
-            
+            <div class="overflow-auto"> 
+                <div class="card rounded bg-white d-flex flex-row align-items-center mb-0 p-2">       
+                    <div class="ml-auto">   
+                        @can('viewAny',  \App\Models\Plan::class)                     
+                        <a href="/plan/history" class="btn btn-white" ><i class="fas fa-history"></i> Histórico</a>
+                        @endcan
+                    </div>
+                </div>              
+            </div> 
             <table-pagination-component        
                 ref="plan"
                 :name="'plan'"         

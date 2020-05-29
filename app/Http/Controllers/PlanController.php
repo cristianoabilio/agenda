@@ -14,6 +14,12 @@ use  App\Http\Requests\StorePlan;
 
 class PlanController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeresource(Plan::class);
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -27,6 +33,24 @@ class PlanController extends Controller
             'types' => $types
         ]);
     }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function history(Request $request)
+    {
+        $status_id = $request->input('status_id', Status::WAITING);
+
+        $plans = Plan::where('company_id', Auth::user()->company_id)
+            ->where('status_id', Status::ACTIVE)
+            ->get();
+
+        return view('plan.history', [
+            'plans' => $plans
+        ]);
+    }     
 
     /**
      * Display a listing of the resource.

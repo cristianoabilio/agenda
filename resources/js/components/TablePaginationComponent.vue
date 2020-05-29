@@ -53,7 +53,10 @@
               </template>      
               <template v-if="column.key == 'user'">                  
                 {{ data.item.user.name }}
-              </template>              
+              </template>       
+              <template v-if="column.key == 'plan'">                  
+                {{ data.item.plan.name }} {{ data.item.plan.description}}
+              </template>          
             </span> 
 
             <span v-else-if="column.key == 'weekday'">
@@ -164,10 +167,9 @@
         let vThis = this;
         let data = $("#"+id).serialize();
 
-        this.$validator.validateAll(id).then(valid => {
-          console.log('aqui 2');
+        this.$validator.validateAll(id).then(valid => {          
             if (!valid) {
-              vThis.$root.mensagem('error', 'Preencha todos os campos obrigatórios')
+              this.$root.mensagem('error', 'Preencha todos os campos obrigatórios')
 
 
                 $.each(response.data.errors, function(index, value) {
@@ -201,7 +203,7 @@
 
                   } else {
                       
-                      $.each(response.data.errors, function(index, value) {
+                      $.each(response.data.errors, function(index, value) {                        
                           $('#'+index).addClass('is-invalid');
                       });
                   }                 
