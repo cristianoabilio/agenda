@@ -8,6 +8,7 @@ use App\Models\Company;
 use App\Models\CompanyModality;
 use App\Models\Plan;
 use App\Models\UserPlan;
+use App\User;
 
 use App\Policies\CheckinPolicy;
 use App\Policies\ClassesPolicy;
@@ -15,6 +16,7 @@ use App\Policies\CompanyPolicy;
 use App\Policies\CompanyModalityPolicy;
 use App\Policies\PlanPolicy;
 use App\Policies\UserPlanPolicy;
+use App\Policies\UserPolicy;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -34,6 +36,7 @@ class AuthServiceProvider extends ServiceProvider
         CompanyModality::class => CompanyModalityPolicy::class,        
         Plan::class => PlanPolicy::class,      
         UserPlan::class => UserPlanPolicy::class,      
+        User::class => UserPolicy::class,      
           
     ];
 

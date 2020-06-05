@@ -68,15 +68,29 @@ class ClassesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function filter()
+    public function filter(Request $request)
     {
-        $companies = Classes::with(['teacher' => function($query) {
-            $query->where('company_id', Auth::user()->company_id);
-        }])
+        if (Auth::user()->profile_id == Profile::STUDENT) {
+            //return response()->json([$request->all()]);
+            $companies = Classes::with(['teacher' => function($query) use ($request) {
+                $query->where('company_id', $request->input('company_id'));
+            }])
+            ->where('weekday', date('w'))
             ->where('status_id', Status::ACTIVE)
             ->with('modality.modality')
             ->with('level')
             ->get();
+        } else {
+            $companies = Classes::with(['teacher' => function($query) {
+                $query->where('company_id', Auth::user()->company_id);
+            }])
+                ->where('status_id', Status::ACTIVE)
+                ->with('modality.modality')
+                ->with('level')
+                ->get();
+
+                $companies = [];
+        }
 
         return json_encode([
             'status' => 'success', 

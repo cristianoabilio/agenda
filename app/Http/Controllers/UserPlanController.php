@@ -86,6 +86,51 @@ class UserPlanController extends Controller
         ]);
     }   
 
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function filter(Request $request)
+    {
+        
+
+        DB::enableQueryLog();
+        $date = new Date();
+        //return response()->json($date->dateToSql($request->input('start')));
+        $query = UserPlan::where('status_id', Status::ACTIVE);
+
+        if ($request->input('start') && !empty($request->input('start'))) {
+            $query = $query->where('created_at', '>=', $date->dateToSql($request->input('start')));
+        }
+
+        if ($request->input('end') && !empty($request->input('end'))) {
+            $query = $query->where('created_at', '<=', $date->dateToSql($request->input('end')));
+        }
+
+        if ($request->input('plan_id') && !empty($request->input('plan_id'))) {
+            $query = $query->where('plan_id', $request->input('plan_id'));
+        }
+
+        $plans = $query->where('user_id', Auth::user()->id)
+        ->with('plan')
+        ->with('plan.company')
+        ->with('user')
+        ->orderBy('created_at', 'DESC')
+        ->limit(5)
+        ->get();
+
+        //dd(DB::getQueryLog());
+        
+        return json_encode([
+            'status' => 'success', 
+             'data' => $plans,
+             'message' => 'Busca realizada'
+        ]);
+    }   
+
+
     /**
      * Show the form for creating a new resource.
      *

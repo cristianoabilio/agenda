@@ -68,9 +68,11 @@
                                     <a class="nav-link" href="{{ route('modality') }}">Modalidades</a>
                                 </li>
                             @endcan
+                            @can('viewAny',  \App\User::class)
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('users') }}">Usuários</a>
                             </li>
+                            @endcan
                         @endif
                     </ul>
 

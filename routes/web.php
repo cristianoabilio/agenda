@@ -56,6 +56,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/checkin', 'CheckinController@index')->name('checkin');
     Route::get('/checkin/history', 'CheckinController@history');
     Route::post('/checkin/company', 'CheckinController@company');
+    Route::post('/checkin/user', 'CheckinController@user');
     Route::post('/checkin', 'CheckinController@store')->name('checkin');
     Route::post('/checkin/list', 'CheckinController@filter');    
     Route::post('/checkin/destroy', 'CheckinController@delete');

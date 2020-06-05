@@ -87,6 +87,8 @@ import "vue-select/dist/vue-select.css";
 Vue.component('table-pagination-component', require('./components/TablePaginationComponent.vue').default);
 Vue.component('checkbox-component', require('./components/CheckBoxComponent.vue').default);
 Vue.component('checkin-component', require('./components/CheckinComponent.vue').default);
+Vue.component('plan-list-component', require('./components/PlanListComponent.vue').default);
+Vue.component('class-list-component', require('./components/ClassListComponent.vue').default);
 Vue.component('bubble-graph-component', require('./components/GraphComponent.vue').default);
 Vue.component('line-graph-component', require('./components/LineGraphComponent.vue').default);
 Vue.component('bar-graph-component', require('./components/GraphBarComponent.vue').default);

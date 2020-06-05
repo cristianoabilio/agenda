@@ -7,6 +7,7 @@ use App\Helpers\Date;
 use App\Mail\SendCheckinMail;
 use App\Models\Classes;
 use App\Models\Checkin;
+use App\Models\Profile;
 use App\Models\Status;
 use App\Models\UserPlan;
 use Illuminate\Http\Request;
@@ -101,7 +102,7 @@ class CheckinController extends Controller
         $date = new Date();
 
         $start = ($start) ? $date->dateToSql($start) : date('Y-m-d H:i:s', strtotime(date('Y-m-d 00:00:00')."-30 days"));
-        $end = ($end) ? $date->dateToSql($end) : date('Y-m-d H:i:s', strtotime(date('Y-m-d 00:00:00')));
+        $end = ($end) ? $date->dateToSql($end) : date('Y-m-d H:i:s', strtotime(date('Y-m-d 23:59:59')));
 
         $checkins = Checkin::with(['class' => function($query) {
             $query->with(['teacher' => function($query) {
@@ -139,7 +140,7 @@ class CheckinController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function company(Request $request)
-    {
+    {        
         $response = DB::transaction(function () use ($request) { 
 
             $user_id = $request->input('user_id');
@@ -158,7 +159,7 @@ class CheckinController extends Controller
 
                 if ($userPlan && $userPlan->available) {
                     $request->merge([
-                        'status_id' => Status::ACTIVE
+                        'status_id' => ($request->input('status_id')) ? $request->input('status_id') : Status::ACTIVE
                     ]);
 
                     $checkin = Checkin::create($request->all());
@@ -178,8 +179,10 @@ class CheckinController extends Controller
                     ->with('user')
                     ->first();
 
-                    $to = 'cristianocafr@gmail.com';
-                    Mail::to($to)->send(new SendCheckinMail($checkin, $userPlan)); 
+                    if (Auth::user()->profile_id != Profile::STUDENT) {
+                        $to = 'cristianocafr@gmail.com';
+                        Mail::to($to)->send(new SendCheckinMail($checkin, $userPlan)); 
+                    }                    
                     
                 } else {
                     $message = 'O aluno não tem mais créditos disponíveis.';
@@ -196,7 +199,7 @@ class CheckinController extends Controller
         return $response;  
 
 
-    }    
+    }  
 
 
     /**
