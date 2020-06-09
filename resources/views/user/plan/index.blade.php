@@ -6,7 +6,15 @@
     <div class="row justify-content-center">          
         <div class="col-md-12">
             <h2>Créditos</h2>
-        
+            <div class="overflow-auto"> 
+                <div class="card rounded bg-white d-flex flex-row align-items-center mb-0 p-2">       
+                    <div class="ml-auto">   
+                        @can('viewAny',  \App\Models\Plan::class)                     
+                        <a href="/plan/history" class="btn btn-white" ><i class="fas fa-history"></i> Histórico</a>
+                        @endcan
+                    </div>
+                </div>              
+            </div> 
             <div class="container col-md-6 p-3" >
                 <b-form id="search-user" inline onsubmit="return false;">
                     <label class="mr-sm-2 " >Pesquisar</label>

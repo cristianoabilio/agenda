@@ -30,117 +30,164 @@ class ReportController extends Controller
         $start = date('Y-m-d H:i:s', strtotime(date('Y-m-d 00:00:00')."-30 days"));
         $end = date('Y-m-d H:i:s', strtotime(date('Y-m-d 23:59:59')));
         $visitors = $totalPlan = 0;
-
-        if (Auth::user()->profile_id == Profile::RESPONSABLE) {
-            $plans = Plan::where('company_id', Auth::user()->company_id)
-            ->where('type', Plan::EXPERIMENTAL)
-            ->where('status_id', Status::ACTIVE)
-            ->get()->pluck('id');
-
-            if ($plans) {
-                $visitors = UserPlan::whereIn('plan_id', $plans)
-                ->whereBetween('created_at', [$start, $end])
-                ->get()->count();
-            }
-
-            $plans = Plan::where('company_id', Auth::user()->company_id)
+        $data = [];
+        
+        switch (Auth::user()->profile_id) {
+            case Profile::RESPONSABLE:
+                $plans = Plan::where('company_id', Auth::user()->company_id)
+                ->where('type', Plan::EXPERIMENTAL)
                 ->where('status_id', Status::ACTIVE)
-                ->where('type', '<>', Plan::EXPERIMENTAL)
                 ->get()->pluck('id');
 
-            $totalPlan = UserPlan::whereIn('plan_id', $plans)
-                ->whereBetween('created_at', [$start, $end])
-                ->get()->count();    
-
-            $money = UserPlan::whereIn('plan_id', $plans)
-                ->whereBetween('created_at', [$start, $end])
-                ->get()->sum('price');       
-
-            $discount = UserPlan::whereIn('plan_id', $plans)
-                ->whereBetween('created_at', [$start, $end])
-                ->get()->sum('discount');   
-                
-                
-                
-                    
-
-
-            //DB::enableQueryLog();
-            $checkins = Checkin::groupBy('class_id')
-            ->join('classes', 'classes.id', '=', 'checkin.class_id')
-            ->join('users', 'users.id', '=', 'classes.teacher_id')
-            ->where('users.company_id', Auth::user()->company_id)
-            ->whereBetween('checkin.created_at', [$start, $end])
-            ->selectRaw('count(*) as total, class_id')
-            ->limit(3)
-            ->get();
-            //dd(DB::getQueryLog());
-
-
-            $totalCheckins = Checkin::join('classes', 'classes.id', '=', 'checkin.class_id')
-            ->join('users', 'users.id', '=', 'classes.teacher_id')
-            ->where('users.company_id', Auth::user()->company_id)  
-            ->where('checkin.status_id', Status::ACTIVE)      
-            ->get()->count();
-
-            $totalClasses = Checkin::groupBy('date')
-            ->join('classes', 'classes.id', '=', 'checkin.class_id')
-            ->join('users', 'users.id', '=', 'classes.teacher_id')
-            ->where('users.company_id', Auth::user()->company_id)  
-            ->where('checkin.status_id', Status::ACTIVE)
-            ->selectRaw('DATE_FORMAT(checkin.created_at, "%Y-%m-%d") as date')
-            ->groupBy('class_id')->get()->count();
-
-
-            $classes = [];
-            if ($checkins) {
-                foreach ($checkins as $class) {
-                    $classes[] = Classes::where('id', $class->class_id)->first();
+                if ($plans) {
+                    $visitors = UserPlan::whereIn('plan_id', $plans)
+                    ->whereBetween('created_at', [$start, $end])
+                    ->get()->count();
                 }
-            }
 
-            $data = [
-                'visitors' => $visitors,
-                'total'    => $totalPlan,
-                'money'     => ($money-$discount),
-                'ranking'   => $classes,
-                'average'   => ($totalClasses) ? $totalCheckins/$totalClasses : 0
-            ];
-        }elseif (Auth::user()->profile_id == Profile::STUDENT) {
-            $totalCheckins = Checkin::where('user_id', Auth::user()->id)
+                $plans = Plan::where('company_id', Auth::user()->company_id)
+                    ->where('status_id', Status::ACTIVE)
+                    ->where('type', '<>', Plan::EXPERIMENTAL)
+                    ->get()->pluck('id');
+
+                $totalPlan = UserPlan::whereIn('plan_id', $plans)
+                    ->whereBetween('created_at', [$start, $end])
+                    ->get()->count();    
+
+                $money = UserPlan::whereIn('plan_id', $plans)
+                    ->whereBetween('created_at', [$start, $end])
+                    ->get()->sum('price');       
+
+                $discount = UserPlan::whereIn('plan_id', $plans)
+                    ->whereBetween('created_at', [$start, $end])
+                    ->get()->sum('discount');   
+                    
+                //DB::enableQueryLog();
+                $checkins = Checkin::groupBy('class_id')
+                ->join('classes', 'classes.id', '=', 'checkin.class_id')
+                ->join('users', 'users.id', '=', 'classes.teacher_id')
+                ->where('users.company_id', Auth::user()->company_id)
+                ->whereBetween('checkin.created_at', [$start, $end])
+                ->selectRaw('count(*) as total, class_id')
+                ->limit(3)
+                ->get();
+                //dd(DB::getQueryLog());
+
+
+                $totalCheckins = Checkin::join('classes', 'classes.id', '=', 'checkin.class_id')
+                ->join('users', 'users.id', '=', 'classes.teacher_id')
+                ->where('users.company_id', Auth::user()->company_id)  
+                ->where('checkin.status_id', Status::ACTIVE)      
+                ->get()->count();
+
+                $totalClasses = Checkin::groupBy('date')
+                ->join('classes', 'classes.id', '=', 'checkin.class_id')
+                ->join('users', 'users.id', '=', 'classes.teacher_id')
+                ->where('users.company_id', Auth::user()->company_id)  
+                ->where('checkin.status_id', Status::ACTIVE)
+                ->selectRaw('DATE_FORMAT(checkin.created_at, "%Y-%m-%d") as date')
+                ->groupBy('class_id')->get()->count();
+
+
+                $classes = [];
+                if ($checkins) {
+                    foreach ($checkins as $class) {
+                        $classes[] = Classes::where('id', $class->class_id)->first();
+                    }
+                }
+
+                $data = [
+                    'visitors' => $visitors,
+                    'total'    => $totalPlan,
+                    'money'     => ($money-$discount),
+                    'ranking'   => $classes,
+                    'average'   => ($totalClasses) ? $totalCheckins/$totalClasses : 0
+                ];
+            break;
+
+            case Profile::TEACHER:
+                $classes = Classes::where('teacher_id', Auth::user()->id)
+                ->where('status_id', Status::ACTIVE)
+                ->orderBy('weekDay', 'ASC')
+                ->orderBy('start', 'ASC')
+                ->get();
+                
+                $ids = $classes->pluck('id');
+                
+
+                $visitors = Checkin::join('users', 'users.id', '=', 'checkin.user_id')
+                ->join('user_plan', 'users.id', '=', 'user_plan.user_id')
+                ->join('plano', 'plano.id', '=', 'user_plan.plan_id')
+                ->where('plano.type', Plan::EXPERIMENTAL)
+                ->whereIn('class_id', $ids)
+                ->whereBetween('checkin.created_at', [$start, $end])
+                ->get()->count();
+
+                $totalClasses = Checkin::groupBy('date')
+                ->whereIn('class_id', $ids) 
+                ->where('checkin.status_id', Status::ACTIVE)
+                ->selectRaw('DATE_FORMAT(checkin.created_at, "%Y-%m-%d") as date')
+                ->groupBy('class_id')->get()->count();
+
+                $totalCheckins = Checkin::whereIn('class_id', $ids)  
+                ->where('checkin.status_id', Status::ACTIVE)      
+                ->get()->count();
+
+
+
+
+
+                $checkins = Checkin::join('classes', 'classes.id', '=', 'checkin.class_id')
+                ->join('users', 'users.id', '=', 'classes.teacher_id')
+                ->where('classes.teacher_id', Auth::user()->id)
+                ->whereBetween('checkin.created_at', [$start, $end])
+                ->get()->count();
+
+
+
+                $data = [
+                    'visitors' => $visitors,
+                    'checkin'    => $checkins,
+                    'money'     => 0,
+                    'classes'   => $classes,
+                    'average'   => ($totalClasses) ? $totalCheckins/$totalClasses : 0
+                ];
+            break;
+
+            case Profile::STUDENT:
+                $totalCheckins = Checkin::where('user_id', Auth::user()->id)
                 ->where('status_id', Status::ACTIVE)
                 ->count();             
 
-            //DB::enableQueryLog();
-            $companies = UserPlan::groupBy('total')
-            ->join('plano', 'plano.id', '=', 'user_plan.plan_id')
-            ->where('user_plan.user_id', Auth::user()->id)  
-            ->where('user_plan.status_id', Status::ACTIVE)
-            ->selectRaw('count(*) as total, plano.company_id')
-            ->groupBy('plano.company_id')->get()->count();
-            //dd(DB::getQueryLog());
-            //dd($companies);
+                //DB::enableQueryLog();
+                $companies = UserPlan::groupBy('total')
+                ->join('plano', 'plano.id', '=', 'user_plan.plan_id')
+                ->where('user_plan.user_id', Auth::user()->id)  
+                ->where('user_plan.status_id', Status::ACTIVE)
+                ->selectRaw('count(*) as total, plano.company_id')
+                ->groupBy('plano.company_id')->get()->count();
+                //dd(DB::getQueryLog());
+                //dd($companies);
 
-            $plans = UserPlan::where('user_id', Auth::user()->id)
-                ->with('plan')
-                ->with('user')
-                ->get();
+                $plans = UserPlan::where('user_id', Auth::user()->id)
+                    ->with('plan')
+                    ->with('user')
+                    ->get();
 
-            $checkins = Checkin::where('user_id', Auth::user()->id)
-                ->where('status_id', Status::ACTIVE)
-                ->orderBy('created_at', 'DESC')
-                ->limit('5')
-                ->get();     
+                $checkins = Checkin::where('user_id', Auth::user()->id)
+                    ->where('status_id', Status::ACTIVE)
+                    ->orderBy('created_at', 'DESC')
+                    ->limit('5')
+                    ->get();     
 
-            $data = [
-                'companies' => $companies,
-                'checkins'    => $checkins,                
-                'plans'   => $plans,
-                'totalCheckins'   => $totalCheckins
-            ];
+                $data = [
+                    'companies' => $companies,
+                    'checkins'    => $checkins,                
+                    'plans'   => $plans,
+                    'totalCheckins'   => $totalCheckins
+                ];
+            break;
         }
-
-
         
 
         //dd($classes);
@@ -149,13 +196,87 @@ class ReportController extends Controller
 
     public function bar(Request $request) 
     {
+        if (Auth::user()->profile_id == Profile::RESPONSABLE) {
+            // administrador escola
+            $data = $this->company();
+        } else {
+            $data = $this->teacher();
+        }
+        return $data;
+        
+
+    }
+
+
+    private function teacher() 
+    {
+        // professor
+
         $from = strtotime("-7 days");
         $today = date('Y-m-d');
 
+        $columns = $rows = $labels = [];
+
+        $classes = Classes::where('teacher_id', Auth::user()->id)
+        ->selectRaw('modality_id')
+        ->groupBy('modality_id')->get();
+
+        //return response()->json([$class]);
+
+        foreach ($classes as $class) {
+            $modality = CompanyModality::where('id', $class->modality_id)
+                ->with('modality')
+                ->first();
+            $columns[] = [$modality->modality->name];
+        
+            
+            $count = [];
+
+            for ($i = 0; $i <7; $i++) {
+                $checkins = 0;
+                $end = date('Y-m-d H:i:s', strtotime(date('Y-m-d 23:59:59')."-".$i." days"));
+                $start = date('Y-m-d H:i:s', strtotime(date('Y-m-d 00:00:00')."-".$i." days"));
+
+                if (count($labels) < 7) {
+                    $labels[] = date('d/m', strtotime("-".$i." days"));
+                }                
+                
+                $class = Classes::where('modality_id', $modality->id)
+                ->where('teacher_id', Auth::user()->id)
+                ->get()->pluck('id');
+
+
+                $total = Checkin::where('status_id', Status::ACTIVE)
+                    ->whereBetween('created_at', [$start, $end])
+                    ->whereIn('class_id', $class)
+                    ->get()->count();
+                    
+                $count[] = $total;
+
+                   // dd(DB::getQueryLog());
+
+            }
+            $rows[] = $count;   
+        }
+        return response()->json([
+            'status' => 'success', 
+            'columns' => $columns,
+            'to' => $today,
+            'from' => $from,
+            'labels' => $labels,
+            'values' => $rows,
+        ]);
+    }
+
+    private function company()
+    {
+        $from = strtotime("-7 days");
+        $today = date('Y-m-d');
 
         $modalities = CompanyModality::where('company_id', Auth::user()->company_id)
-                        ->with('modality')
-        ->get();
+            ->where('status_id', Status::ACTIVE)
+            ->with('modality')
+            ->get();
 
         $columns = $rows = $labels = [];
 

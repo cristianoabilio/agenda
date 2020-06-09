@@ -38,6 +38,7 @@ class ClassesController extends Controller
             ->get();
 
         $modalities = CompanyModality::where('company_id', $user->company_id)
+            ->where('status_id', Status::ACTIVE)
             ->with('modality')
             ->get();
 
@@ -70,26 +71,29 @@ class ClassesController extends Controller
      */
     public function filter(Request $request)
     {
-        if (Auth::user()->profile_id == Profile::STUDENT) {
-            //return response()->json([$request->all()]);
-            $companies = Classes::with(['teacher' => function($query) use ($request) {
-                $query->where('company_id', $request->input('company_id'));
-            }])
-            ->where('weekday', date('w'))
-            ->where('status_id', Status::ACTIVE)
-            ->with('modality.modality')
-            ->with('level')
-            ->get();
-        } else {
-            $companies = Classes::with(['teacher' => function($query) {
-                $query->where('company_id', Auth::user()->company_id);
-            }])
+
+        switch (Auth::user()->profile_id) {
+            case Profile::STUDENT:
+                $companies = Classes::with(['teacher' => function($query) use ($request) {
+                    $query->where('company_id', $request->input('company_id'));
+                }])
+                ->where('weekday', date('w'))
                 ->where('status_id', Status::ACTIVE)
                 ->with('modality.modality')
                 ->with('level')
                 ->get();
+            break;
 
-                $companies = [];
+            default:
+                $companies = Classes::with(['teacher' => function($query) {
+                    $query->where('company_id', Auth::user()->company_id);
+                }])
+                    ->where('status_id', Status::ACTIVE)
+                    ->with('modality.modality')
+                    ->with('level')
+                    ->get();
+
+            break;
         }
 
         return json_encode([

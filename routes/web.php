@@ -18,7 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::group(['middleware' => 'auth'], function() {
-    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/home', 'ReportController@index')->name('home');
 
     Route::group(['middleware' => 'gym-mate-web'], function() {
         Route::get('/company', 'CompanyController@index')->name('company');
@@ -79,6 +79,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('/users', 'UserController@store')->name('users');
     Route::post('/users/list', 'UserController@filter');
     Route::post('/users/destroy', 'UserController@destroy');
+    Route::get('/users/change-password', 'UserController@password')->name('change-password');
+    Route::post('/users/save-password', 'UserController@updatePassword');
 });
 
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\CompanyModality;
 use App\Models\Modality;
+use App\Models\Status;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
@@ -25,7 +26,9 @@ class ModalityController extends Controller
         $modalities = Modality::orderBy('name')->get();
 
         $company_id = Auth::user()->company_id;
-        $companyModalities = CompanyModality::where('company_id', $company_id)->pluck('modality_id');
+        $companyModalities = CompanyModality::where('company_id', $company_id)
+        ->where('status_id', Status::ACTIVE)
+        ->pluck('modality_id');
 
 
         return view('modality.index', ['modalities' => $modalities, 'selected' => $companyModalities]);        
@@ -51,18 +54,23 @@ class ModalityController extends Controller
     {
         $response = DB::transaction(function () use ($request) {
             $company_id = Auth::user()->company_id;
-
-            CompanyModality::where('company_id',$company_id)->delete();
-            
             $items = $request->input('item');
+
+            CompanyModality::where('company_id',$company_id)
+                ->whereNotIn('modality_id', $items)
+                ->update(['status_id' => Status::INACTIVE]);                        
             
             if ($items) {
                 $modalities = [];
                 foreach ($items as $item) {
-                    $modalities[] = ['company_id' => $company_id, 'modality_id' => $item];
+                    $modality = [
+                        'company_id' => $company_id, 
+                        'modality_id' => $item,
+                        'status_id'   => Status::ACTIVE
+                    ];
+                    CompanyModality::updateOrCreate($modality);
                 }
-
-                CompanyModality::insert($modalities);
+                
             }
 
             return json_encode([

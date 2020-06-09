@@ -15,6 +15,7 @@ use App\Helpers\Date;
 
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\Validator;
 
 use  App\Http\Requests\Credit\Store;
 use  App\Http\Requests\Users\StoreUser;
+
 
 class UserPlanController extends Controller
 {
@@ -176,9 +178,9 @@ class UserPlanController extends Controller
                 ]);
             }
 
-            $password = str_random(40);
+            $password = str_random(8);
             $request->merge([
-                'password' => $password
+                'password' => Hash::make($password)
             ]);
             $user = User::create($request->all());
             $user->password = $password;

@@ -7,12 +7,15 @@ use App\User;
 use App\Mail\SendMailWelcome;
 use App\Models\Status;
 use App\Models\Profile;
+use App\Http\Requests\ChangePassword;
 
 use  App\Http\Requests\Users\StoreUser;
 use Illuminate\Support\Facades\DB;
 use App\Helpers\Date;
 
+
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
@@ -130,9 +133,9 @@ class UserController extends Controller
                     ]);
                 }
 
-                $password = str_random(40);
+                $password = str_random(8);
                 $request->merge([
-                    'password' => $password
+                    'password' => Hash::make($password)
                 ]);
                 $user = User::create($request->all());
                 $user->password = $password;
@@ -212,5 +215,25 @@ class UserController extends Controller
                 }                
             }
         }
+    }
+
+    public function password(Request $request)
+    {
+        return view('user.reset-password', ['token' => '']);
+    }
+
+    public function updatePassword(ChangePassword $request)
+    {
+        //return response()->json($request->all());
+        $password = $request->input('password');
+
+        $user = User::where('id', Auth::user()->id)->first();
+        $user->password = Hash::make($password);
+        $user->save();
+        
+        $request->session()->flash('alert-success', 'Senha atualizada com sucesso');
+
+        return redirect()->route("change-password");
+
     }
 }

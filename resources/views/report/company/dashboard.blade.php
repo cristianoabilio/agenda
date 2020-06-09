@@ -59,7 +59,11 @@
                     <ul class="list-group list-group-flush">
                     @foreach ($ranking as $class)
                     
-                        <li class="list-group-item">{{$class->modality->modality->name }} - {{$class->start }} - {{ $class->teacher->name }}</li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center text-secondary">
+                            <span class="badge badge-warning badge-pill"><i class="fas fa-music"></i> {{$class->modality->modality->name }} - {{$class->start }}</span>
+                            <span class="badge badge-primary badge-pill"> {{ (new \App\Helpers\Date)->weekday($class->weekday) }}</span>
+                            <p class="p-3 mb-2 text-info">{{ substr($class->teacher->name, 0, 10) }}...</p>
+                        </li>
 
 
                     @endforeach
@@ -73,8 +77,11 @@
     </div>
 
     <div class="row justify-content-left">
-        <div class="col-md-12">
-            <h2>Estatísticas</h2>
+        <div class="col-md-12 bg-light">
+            <div class="float-right">            
+                <i class="fas fa-chart-bar"></i>        
+            </div>
+            <h5 class="text-muted font-weight-normal mt-0">Estatísticas</h5>
         </div>
         <div class="col-md-12">
             <div class="nav nav-pills col-md-8" id="v-pills-tab" role="tablist" aria-orientation="vertical">

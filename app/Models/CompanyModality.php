@@ -8,7 +8,7 @@ class CompanyModality extends Model
 {
     protected $table = 'company_modality';
     protected $primaryKey = 'id';
-    protected $fillable = ['company_id', 'modality_id'];
+    protected $fillable = ['company_id', 'modality_id', 'status_id'];
 
     public function modality() {
         return $this->hasOne('App\Models\Modality', 'id', 'modality_id');
@@ -16,5 +16,9 @@ class CompanyModality extends Model
 
     public function company() {
         return $this->hasOne('App\Models\Company', 'id', 'company_id');
+    }
+
+    public function status() {
+        return $this->hasOne('App\Models\Status', 'id', 'status_id');
     }
 }
