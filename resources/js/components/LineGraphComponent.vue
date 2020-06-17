@@ -36,7 +36,7 @@ export default {
       filter() {
           console.log('teste');
         let vThis = this;
-        let url = '/stats/line';
+        let url = '/report/line';
         axios.post(url)
               .then(function (response) {
                     

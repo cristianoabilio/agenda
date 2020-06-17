@@ -32,7 +32,7 @@ export default {
       filter() {
           console.log('teste');
         let vThis = this;
-        let url = '/stats/bar';
+        let url = '/report/bar';
         axios.post(url)
               .then(function (response) {
                     

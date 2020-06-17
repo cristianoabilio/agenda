@@ -3,6 +3,8 @@
             <h2></h2>
         </div>
 
+        <div class="row justify-content-left">
+        <div class="col-md-12 bg-light">
         <div class="card-columns">
             <div class="card">
                 <div class="card-body">
@@ -75,6 +77,8 @@
             </div> 
             </div>    
     </div>
+    </div>    
+    </div>    
 
     <div class="row justify-content-left">
         <div class="col-md-12 bg-light">

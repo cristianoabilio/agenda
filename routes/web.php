@@ -43,10 +43,10 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('/plan/list', 'PlanController@filter');
     Route::post('/plan/destroy', 'PlanController@delete');
 
-    Route::get('/stats', 'ReportController@index')->name('stats');
-    Route::post('/stats/bar', 'ReportController@bar');
-    Route::post('/stats/bubble', 'ReportController@bubble');
-    Route::post('/stats/line', 'ReportController@line');
+    Route::get('/report', 'ReportController@index')->name('report');
+    Route::post('/report/bar', 'ReportController@bar');
+    Route::post('/report/bubble', 'ReportController@bubble');
+    Route::post('/report/line', 'ReportController@line');
 
     
     Route::get('/modality', 'ModalityController@index')->name('modality');

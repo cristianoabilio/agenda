@@ -35,7 +35,7 @@ export default {
       filter() {
           console.log('teste');
         let vThis = this;
-        let url = '/stats/bubble';
+        let url = '/report/bubble';
         axios.post(url)
               .then(function (response) {
                     

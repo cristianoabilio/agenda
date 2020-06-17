@@ -16,6 +16,8 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -36,7 +38,7 @@
                     <ul class="navbar-nav mr-auto">
                         @if (Auth::user()) 
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('stats') }}">Dashboard</a>
+                                <a class="nav-link" href="{{ route('report') }}">Dashboard</a>
                             </li>
                             @can('viewAny', \App\Models\Company::class)
                                 <li class="nav-item">
