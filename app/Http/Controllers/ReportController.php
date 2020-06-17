@@ -26,12 +26,13 @@ class ReportController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {        
-        $start = date('Y-m-d H:i:s', strtotime(date('Y-m-d 00:00:00')."-30 days"));
+    {                
+        $day = date('d')-1;
+        $start = date('Y-m-d H:i:s', strtotime(date('Y-m-d 00:00:00')."-".$day." days"));
         $end = date('Y-m-d H:i:s', strtotime(date('Y-m-d 23:59:59')));
         $visitors = $totalPlan = 0;
         $data = [];
-        
+                
         switch (Auth::user()->profile_id) {
             case Profile::RESPONSABLE:
                 $plans = Plan::where('company_id', Auth::user()->company_id)
@@ -212,6 +213,7 @@ class ReportController extends Controller
     {
         // professor
 
+        $day = date('d');
         $from = strtotime("-7 days");
         $today = date('Y-m-d');
 
@@ -288,12 +290,13 @@ class ReportController extends Controller
             $count = [];
             
             DB::enableQueryLog();
-            for ($i = 0; $i <7; $i++) {
+            $days = date('d');
+            for ($i = 0; $i < $days; $i++) {
                 $checkins = 0;
                 $end = date('Y-m-d H:i:s', strtotime(date('Y-m-d 23:59:59')."-".$i." days"));
                 $start = date('Y-m-d H:i:s', strtotime(date('Y-m-d 00:00:00')."-".$i." days"));
 
-                if (count($labels) < 7) {
+                if (count($labels) < $days) {
                     $labels[] = date('d/m', strtotime("-".$i." days"));
                 }
                 
@@ -320,7 +323,7 @@ class ReportController extends Controller
 
         $totalDay = [];
         
-        for ($i = 0; $i <7; $i++) {
+        for ($i = 0; $i < $days; $i++) {
             $checkins = 0;
             $end = date('Y-m-d H:i:s', strtotime(date('Y-m-d 23:59:59')."-".$i." days"));
             $start = date('Y-m-d H:i:s', strtotime(date('Y-m-d 00:00:00')."-".$i." days"));
@@ -352,7 +355,8 @@ class ReportController extends Controller
 
     public function bubble(Request $request)
     {
-        for ($i = 0; $i <7; $i++) {
+        $days = date('d');
+        for ($i = 0; $i < $days; $i++) {
             $checkins = 0;
             $end = date('Y-m-d H:i:s', strtotime(date('Y-m-d 23:59:59')."-".$i." days"));
             $start = date('Y-m-d H:i:s', strtotime(date('Y-m-d 00:00:00')."-".$i." days"));
@@ -374,7 +378,7 @@ class ReportController extends Controller
         return response()->json([
             'status' => 'success', 
             'data' => $totalDay,
-            'start' => date('Y-m-d H:i:s', strtotime(date('Y-m-d 00:00:00')."-7 days")),
+            'start' => date('Y-m-d H:i:s', strtotime(date('Y-m-d 00:00:00')."-".$days." days")),
             'end' => date('Y-m-d 00:00:00')
             
         ]);
@@ -390,11 +394,13 @@ class ReportController extends Controller
 
 
         $labels = $days = $values = [];
+        $day = date('d');
         foreach ($plans as $p) {
             $labels[] = $p->name;
 
             $total = [];
-            for ($i = 0; $i <7; $i++) {
+            
+            for ($i = 0; $i < $day; $i++) {
                 
                 $end = date('Y-m-d H:i:s', strtotime(date('Y-m-d 23:59:59')."-".$i." days"));
                 $start = date('Y-m-d H:i:s', strtotime(date('Y-m-d 00:00:00')."-".$i." days"));
@@ -405,7 +411,7 @@ class ReportController extends Controller
                         
                         ->get()->count();
     
-                if (count($days) < 7) {
+                if (count($days) < $day) {
                     $days[] = [date("d/m", strtotime(date('Y-m-d 00:00:00')."-".$i." days"))];
                 }                                   
     

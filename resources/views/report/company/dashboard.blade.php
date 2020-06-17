@@ -14,7 +14,7 @@
                     <h5 class="text-muted font-weight-normal mt-0" title="Number of Customers">Visitantes</h5>
                     <h3 class="mt-3 mb-3 text-info">{{$visitors}}</h3>
                     <p class="mb-0 text-muted">
-                        <span class="text-nowrap small">Nos últimos 30 dias</span>  
+                        <span class="text-nowrap small">Nesse mês</span>  
                     </p>
                 </div> <!-- end card-body-->
             </div>  
@@ -27,7 +27,7 @@
                     <h5 class="text-muted font-weight-normal mt-0" title="Planos">Planos</h5>
                     <h3 class="mt-3 mb-3 text-success">{{$total}}</h3>
                     <p class="mb-0 text-muted">
-                        <span class="text-nowrap small">Nos últimos 30 dias</span>  
+                        <span class="text-nowrap small">Nesse mês</span>  
                     </p>
                 </div> <!-- end card-body-->
             </div>
@@ -39,7 +39,7 @@
                     <h5 class="text-muted font-weight-normal mt-0" title="Valores">Valores</h5>
                     <h3 class="mt-3 mb-3 text-success">{{ number_format($money, 2, ',', '.') }}</h3>
                     <p class="mb-0 text-muted">
-                        <span class="text-nowrap small">Nos últimos 30 dias em R$</span>  
+                        <span class="text-nowrap small">Nesse mês em R$</span>  
                     </p>
                 </div> <!-- end card-body-->
             </div>
@@ -71,7 +71,7 @@
                     @endforeach
                     </ul>
                     <p class="mb-0 text-muted">
-                        <span class="text-nowrap small">Nos últimos 30 dias em R$</span>  
+                        <span class="text-nowrap small">Nesse mês em R$</span>  
                     </p>
                 </div> <!-- end card-body-->
             </div> 

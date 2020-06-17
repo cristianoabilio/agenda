@@ -1,7 +1,7 @@
 <template>
   <div id="">
     <graph-bar
-            :width="450"
+            :width="750"
             :height="350"
             :axis-min="0"
             :axis-max="30"

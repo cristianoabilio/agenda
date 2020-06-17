@@ -1,7 +1,7 @@
 <template>
   <div id="">
     <graph-line
-            :width="550"
+            :width="750"
             :height="350"
             :shape="'normal'"
             :axis-min="0"
