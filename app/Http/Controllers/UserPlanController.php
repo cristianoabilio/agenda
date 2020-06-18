@@ -391,4 +391,50 @@ class UserPlanController extends Controller
              'message' => 'Busca realizada'
         ]);
     }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function validity(Request $request)
+    {
+        //return response()->json($request->all());
+        $id = $request->input('id');    
+
+        if ($id) {
+            $userPlan = UserPlan::where('id', $id)->first();
+
+            if ($userPlan) {
+
+                $date = new Date();
+                if ($request->input('end') && !empty($request->input('end'))) {
+                    $diff = $date->diffDate($date->dateToSql($request->input('end')), $userPlan->end, '%d');
+
+                    if ($diff > 0) {
+                        $userPlan->end       = $date->dateToSql($request->input('end'));
+                    } else {
+                        return json_encode([
+                            'status' => 'info', 
+                            'errors' => ['end-edit' => 'end-edit'],
+                            'message' => 'O data selecionada é menor que o vencimento atual.'
+                        ]);
+                    }
+                    
+                }
+                
+                if ($request->input('available') && !empty($request->input('available'))) {
+                    $userPlan->available = $request->input('available');
+                }    
+                
+                $userPlan->save();
+
+                return json_encode([
+                    'status' => 'success', 
+                    'message' => 'Plano desativado com sucesso.', 'data' => $userPlan
+                ]);
+                               
+            }
+        }
+    }
 }

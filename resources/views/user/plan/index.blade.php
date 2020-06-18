@@ -76,6 +76,11 @@
             >                
                 @include("user.plan.delete")
             </b-modal>
+            <b-modal id="edit" title="Créditos"
+
+            >                
+                @include("user.plan.edit")
+            </b-modal>
         </div>
         
     </div>

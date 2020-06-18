@@ -71,6 +71,9 @@
               <b-btn variant="success" v-b-modal.plan v-bind:item="data.item" @click="sendInfo(data.item)">
                 Adicionar
               </b-btn>
+              <b-btn variant="info" v-b-modal.edit v-bind:item="data.item" @click="sendInfo(data.item)">
+                Editar
+              </b-btn>
               <template v-if="data.item['plan_status'] == 1">
                 <b-btn variant="danger" v-b-modal.delete v-bind:item="data.item" @click="sendInfo(data.item)">
                   Desativar
@@ -236,7 +239,8 @@
 
                       vThis.$bvModal.hide('edit')
                       
-
+                      vThis.item = response.data.data;
+                      vThis.$root.item = response.data.data;
                       vThis.$root.mensagem('success', response.data.message)
 
                     } else {
